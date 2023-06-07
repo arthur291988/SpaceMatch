@@ -33,6 +33,8 @@ public class PlayerShip : Ship
         base.makeShot();
     }
 
+    
+
     public override void addToFleetManager()
     {
         PlayerFleetManager.instance.playerFleet.Add(this);

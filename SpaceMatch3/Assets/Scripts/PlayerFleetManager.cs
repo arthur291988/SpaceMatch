@@ -161,7 +161,7 @@ public class PlayerFleetManager : MonoBehaviour
         {
             for (int i = 0; i < value; i++)
             {
-                nextShipToEnergy.energy++;
+                nextShipToEnergy.increaseEnergy(1);
                 assignNextShipToEnergy();
             }
         }
@@ -187,7 +187,7 @@ public class PlayerFleetManager : MonoBehaviour
         int x = UnityEngine.Random.Range(0, 4);
         int v = UnityEngine.Random.Range(3, 8);
 
-        EnemyFleetManager.instance.distributeResources(x, value);
+        EnemyFleetManager.instance.distributeResources(x, v);
     }
 
     public void checkActionsOfFleet() {

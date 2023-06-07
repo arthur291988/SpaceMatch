@@ -153,7 +153,7 @@ public class EnemyFleetManager : MonoBehaviour
         {
             for (int i = 0; i < value; i++)
             {
-                nextShipToEnergy.energy++;
+                nextShipToEnergy.increaseEnergy(1);
                 assignNextShipToEnergy();
             }
         }

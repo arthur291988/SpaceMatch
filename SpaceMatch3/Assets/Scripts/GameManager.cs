@@ -49,6 +49,7 @@ public class GameManager : MonoBehaviour
             Ship ship = ObjectPulled.GetComponent<Ship>();
             ship.StartSettings();
             ObjectPulled.SetActive(true);
+            ship.activatePowerShiledOnStart();
         }
 
     }
@@ -74,6 +75,7 @@ public class GameManager : MonoBehaviour
             Ship ship = ObjectPulled.GetComponent<Ship>();
             ship.StartSettings();
             ObjectPulled.SetActive(true);
+            ship.activatePowerShiledOnStart();
         }
 
     }
