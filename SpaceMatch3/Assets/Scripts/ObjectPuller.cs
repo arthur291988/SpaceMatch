@@ -16,21 +16,21 @@ public class ObjectPuller : MonoBehaviour
     [SerializeField]
     private GameObject Tiles;
     [SerializeField]
-    private GameObject playerShot;
+    private GameObject playerFlagshipShot;
     [SerializeField]
     private GameObject enemyShot;
 
     [SerializeField]
-    private GameObject playerShip;
+    private GameObject playerFlagship;
     [SerializeField]
     private GameObject enemyShip;
 
     private List<GameObject> TilesList;
     private List<GameObject> enemyShotList;
-    private List<GameObject> playerShotList;
+    private List<GameObject> playerFlagshipShotList;
 
     private List<GameObject> enemyShipList;
-    private List<GameObject> playerShipList;
+    private List<GameObject> playerFlagshipList;
 
 
     private void Awake()
@@ -44,10 +44,10 @@ public class ObjectPuller : MonoBehaviour
         TilesList = new List<GameObject>();
 
         enemyShotList = new List<GameObject>();
-        playerShotList = new List<GameObject>();
+        playerFlagshipShotList = new List<GameObject>();
 
         enemyShipList = new List<GameObject>();
-        playerShipList = new List<GameObject>();
+        playerFlagshipList = new List<GameObject>();
 
 
         for (int i = 0; i < pullOfObjects100; i++)
@@ -64,9 +64,9 @@ public class ObjectPuller : MonoBehaviour
             obj1.SetActive(false);
             enemyShotList.Add(obj1);
 
-            GameObject obj2 = Instantiate(playerShot);
+            GameObject obj2 = Instantiate(playerFlagshipShot);
             obj2.SetActive(false);
-            playerShotList.Add(obj2);
+            playerFlagshipShotList.Add(obj2);
 
         }
 
@@ -76,9 +76,9 @@ public class ObjectPuller : MonoBehaviour
             obj1.SetActive(false);
             enemyShipList.Add(obj1);
 
-            GameObject obj2 = Instantiate(playerShip);
+            GameObject obj2 = Instantiate(playerFlagship);
             obj2.SetActive(false);
-            playerShipList.Add(obj2);
+            playerFlagshipList.Add(obj2);
 
         }
 
@@ -88,18 +88,18 @@ public class ObjectPuller : MonoBehaviour
     {
         return TilesList;
     }
-    public List<GameObject> GetPlayerShotPullList()
+    public List<GameObject> GetPlayerFlagshipShotPullList()
     {
-        return playerShotList;
+        return playerFlagshipShotList;
     }
     public List<GameObject> GetEnemyShotPullList()
     {
         return enemyShotList;
     }
 
-    public List<GameObject> GetPlayerShipPullList()
+    public List<GameObject> GetPlayerFlagshipPullList()
     {
-        return playerShipList;
+        return playerFlagshipList;
     }
     public List<GameObject> GetEnemyShipPullList()
     {

@@ -9,20 +9,45 @@ public class EnemyShip : Ship
     {
         
     }
+
+
+    public override void StartSettings()
+    {
+        base.StartSettings();
+
+        accuracy = 0.13f; //0.2f
+        shotImpulse = 17; //15
+        shotPower = 0.9f; //0.7
+        shieldEnergyMax = 5; //3
+        HPMax = 7; //5
+        HP = HPMax;
+        energyMax = 9; //7
+        energy = energyMax;
+        minShotTime = 0.7f; //0.5
+        maxShotTime = 2f; //1.5
+
+        updateLifeLine();
+        updateEnergyLine();
+        updateShieldLine();
+    }
+
+
     public override void makeShot()
     {
         ObjectPulledList = ObjectPuller.current.GetEnemyShotPullList();
         ObjectPulled = ObjectPuller.current.GetGameObjectFromPull(ObjectPulledList);
-        ObjectPulled.transform.position = shipPosition;
+        bulletTransform = ObjectPulled.transform;
+        bulletTransform.position = shipPosition;
         ObjectPulled.GetComponent<EnemyShot>()._harm = shotPower;
 
-        PlayerShip shipToAttack = PlayerFleetManager.instance.playerFleet.Count == 1 ? PlayerFleetManager.instance.playerFleet[0] :
+        Ship shipToAttack = PlayerFleetManager.instance.playerFleet.Count == 1 ? PlayerFleetManager.instance.playerFleet[0] :
                 PlayerFleetManager.instance.playerFleet[Random.Range(0, PlayerFleetManager.instance.playerFleet.Count)];
 
         attackDirection = shipToAttack.shipPosition;
 
         attackDirection -= shipPosition;
         attackDirection = RotateAttackVector(attackDirection, Random.Range(-accuracy, accuracy));
+        bulletTransform.rotation = Quaternion.FromToRotation(bulletRotateBase, attackDirection);
         ObjectPulled.SetActive(true);
 
         ObjectPulled.GetComponent<Rigidbody2D>().AddForce(attackDirection.normalized * shotImpulse, ForceMode2D.Impulse);

@@ -6,17 +6,17 @@ using UnityEngine;
 public class PlayerFleetManager : MonoBehaviour
 {
     [NonSerialized]
-    public List<PlayerShip> playerFleet;
+    public List<Ship> playerFleet;
 
 
     [NonSerialized]
-    public PlayerShip nextShipToEnergy;
+    public Ship nextShipToEnergy;
     [NonSerialized]
-    public PlayerShip nextShipToShot;
+    public Ship nextShipToShot;
     [NonSerialized]
-    public PlayerShip nextShipToHP;
+    public Ship nextShipToHP;
     [NonSerialized]
-    public PlayerShip nextShipToShield;
+    public Ship nextShipToShield;
 
     
 
@@ -34,7 +34,7 @@ public class PlayerFleetManager : MonoBehaviour
 
     private void OnEnable()
     {
-        playerFleet = new List<PlayerShip>();
+        playerFleet = new List<Ship>();
     }
 
     //void Start()
@@ -63,7 +63,7 @@ public class PlayerFleetManager : MonoBehaviour
         else if (playerFleet.Count > 0) nextShipToEnergy = playerFleet[0];
     }
 
-    public void assignNextShipToEnergyIfThisDestroyed(PlayerShip ship)
+    public void assignNextShipToEnergyIfThisDestroyed(Ship ship)
     {
         if (ship == nextShipToEnergy)
         {
@@ -87,7 +87,7 @@ public class PlayerFleetManager : MonoBehaviour
         else if (playerFleet.Count > 0) nextShipToHP = playerFleet[0];
     }
 
-    public void assignNextShipToHPIfThisDestroyed(PlayerShip ship)
+    public void assignNextShipToHPIfThisDestroyed(Ship ship)
     {
         if (ship == nextShipToHP)
         {
@@ -111,7 +111,7 @@ public class PlayerFleetManager : MonoBehaviour
         else if (playerFleet.Count > 0) nextShipToShot = playerFleet[0];
     }
 
-    public void assignNextShipToShotIfThisDestroyed(PlayerShip ship)
+    public void assignNextShipToShotIfThisDestroyed(Ship ship)
     {
         if (ship == nextShipToShot)
         {
@@ -134,7 +134,7 @@ public class PlayerFleetManager : MonoBehaviour
         else if (playerFleet.Count > 0) nextShipToShield = playerFleet[0];
     }
 
-    public void assignNextShipToShieldIfThisDestroyed(PlayerShip ship)
+    public void assignNextShipToShieldIfThisDestroyed(Ship ship)
     {
         if (ship == nextShipToShield)
         {
@@ -184,15 +184,10 @@ public class PlayerFleetManager : MonoBehaviour
             }
         }
         
-        int x = UnityEngine.Random.Range(0, 4);
-        int v = UnityEngine.Random.Range(3, 8);
-
-        EnemyFleetManager.instance.distributeResources(x, v);
     }
 
     public void checkActionsOfFleet() {
-        foreach (PlayerShip ship in playerFleet) ship.checkActions();
-        EnemyFleetManager.instance.checkActionsOfFleet();
+        foreach (Ship ship in playerFleet) ship.checkActions();
     }
 
     // Update is called once per frame

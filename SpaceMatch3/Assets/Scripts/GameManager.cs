@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 5; i++)
         {
 
-            ObjectPulledList = ObjectPuller.current.GetPlayerShipPullList();
+            ObjectPulledList = ObjectPuller.current.GetPlayerFlagshipPullList();
             ObjectPulled = ObjectPuller.current.GetGameObjectFromPull(ObjectPulledList);
 
             if (i == 0) ObjectPulled.transform.position = Vector2.zero;

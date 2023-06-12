@@ -39,7 +39,8 @@ public class Shot : MonoBehaviour
         
     }
 
-    public void reduceHarm(float harm) {
+    public void reduceHarm(float harm)
+    {
         _harm -= harm;
         if (harm <= 0) disactivateShot();
     }

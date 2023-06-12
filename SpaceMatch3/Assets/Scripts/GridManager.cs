@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Resources;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.U2D;
 
 public class GridManager : MonoBehaviour
@@ -425,6 +426,17 @@ public class GridManager : MonoBehaviour
         else
         {
             PlayerFleetManager.instance.checkActionsOfFleet();
+
+
+            //CPU turn loop
+            int iteration = UnityEngine.Random.Range(0, 4)<3? UnityEngine.Random.Range(1, 3): UnityEngine.Random.Range(2, 7); 
+            for (int i = 0; i < iteration; i++)
+            {
+                int index = UnityEngine.Random.Range(0, 4);
+                int value = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(3, 5) : UnityEngine.Random.Range(4, 8);
+                EnemyFleetManager.instance.distributeResources(index, value);
+            }
+            EnemyFleetManager.instance.checkActionsOfFleet();
             //CityManager.Instance.startConsume();
             //if (SeasonsManager.Instance.getSteps() < 1) StartCoroutine(SeasonsManager.Instance.endSeason());
         }

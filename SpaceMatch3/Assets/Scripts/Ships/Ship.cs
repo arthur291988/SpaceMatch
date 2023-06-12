@@ -66,36 +66,32 @@ public class Ship : MonoBehaviour
     [NonSerialized]
     public MaterialPropertyBlock matBlockOfEnergyLineSprite;
 
+    [NonSerialized]
+    public Transform bulletTransform;
+    [NonSerialized]
+    public Vector2 bulletRotateBase;
+
 
     // Start is called before the first frame update
     void Start()
     {
     }
 
-    public void StartSettings() {
+    public virtual void StartSettings() {
         if (_gameObject == null) _gameObject = gameObject;
         if (_transform == null) _transform = _gameObject.transform;
         if (matBlockOfLifeLineSprite == null) matBlockOfLifeLineSprite = new MaterialPropertyBlock();
         if (matBlockOfShieldLineSprite == null) matBlockOfShieldLineSprite = new MaterialPropertyBlock();
         if (matBlockOfEnergyLineSprite == null) matBlockOfEnergyLineSprite = new MaterialPropertyBlock();
-
         shipPosition = (Vector2)_transform.position;
         addToFleetManager();
-        accuracy = 0.2f;
-        shotImpulse = 15;
-        shotPower = 0.7f;
-        shieldEnergyMax = 3;
-        HPMax = 5;
-        HP = HPMax;
         shieldCumulation = 0;
-        energyMax = 7;
-        energy = energyMax;
-        minShotTime = 0.5f;
-        maxShotTime = 1.5f;
+        bulletRotateBase = new Vector2(shipPosition.x, shipPosition.y + 1) - shipPosition;
 
-        updateLifeLine();
-        updateEnergyLine();
+       
     }
+
+
 
     public virtual void addToFleetManager() { 
     
@@ -105,19 +101,19 @@ public class Ship : MonoBehaviour
 
     }
 
-    private void updateLifeLine()
+    public void updateLifeLine()
     {
         _spriteRendererOfLifeLine.GetPropertyBlock(matBlockOfLifeLineSprite);
         matBlockOfLifeLineSprite.SetFloat("_Fill", HP / HPMax);
         _spriteRendererOfLifeLine.SetPropertyBlock(matBlockOfLifeLineSprite);
     }
-    private void updateShieldLine()
+    public void updateShieldLine()
     {
         _spriteRendererOfShieldLine.GetPropertyBlock(matBlockOfShieldLineSprite);
         matBlockOfShieldLineSprite.SetFloat("_Fill", shieldCumulation / shieldEnergyMax);
         _spriteRendererOfShieldLine.SetPropertyBlock(matBlockOfShieldLineSprite);
     }
-    private void updateEnergyLine()
+    public void updateEnergyLine()
     {
         _spriteRendererOfEnergyLine.GetPropertyBlock(matBlockOfEnergyLineSprite);
         matBlockOfEnergyLineSprite.SetFloat("_Fill", energy / energyMax);

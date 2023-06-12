@@ -13,7 +13,7 @@ public class EnemyShot : Shot
 
     public override void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.TryGetComponent<PlayerShip>(out PlayerShip ship))
+        if (collision.gameObject.TryGetComponent<Ship>(out Ship ship))
         {
             ship.reduceHP(_harm);
             disactivateShot();
@@ -23,6 +23,13 @@ public class EnemyShot : Shot
         {
             disactivateShot();
         }
+
+        _trailRenderer.Clear();
+
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
         if (collision.gameObject.TryGetComponent<Shield>(out Shield shield))
         {
             float harmBeforeCollision = _harm;
@@ -30,7 +37,6 @@ public class EnemyShot : Shot
             shield.reduceShield(harmBeforeCollision);
             if (_harm <= 0) disactivateShot();
         }
-
         _trailRenderer.Clear();
     }
 

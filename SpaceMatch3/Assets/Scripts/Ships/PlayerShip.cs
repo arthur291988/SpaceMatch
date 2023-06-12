@@ -12,9 +12,10 @@ public class PlayerShip : Ship
 
     public override void makeShot()
     {
-        ObjectPulledList = ObjectPuller.current.GetPlayerShotPullList();
+        ObjectPulledList = ObjectPuller.current.GetPlayerFlagshipShotPullList();
         ObjectPulled = ObjectPuller.current.GetGameObjectFromPull(ObjectPulledList);
-        ObjectPulled.transform.position = shipPosition;
+        bulletTransform = ObjectPulled.transform;
+        bulletTransform.position = shipPosition;
         ObjectPulled.GetComponent<PlayerShot>()._harm = shotPower;
 
 
@@ -26,6 +27,8 @@ public class PlayerShip : Ship
 
         attackDirection -= shipPosition;
         attackDirection = RotateAttackVector(attackDirection, Random.Range(-accuracy, accuracy));
+
+        bulletTransform.rotation = Quaternion.FromToRotation(bulletRotateBase, attackDirection);
         ObjectPulled.SetActive(true);
 
         ObjectPulled.GetComponent<Rigidbody2D>().AddForce(attackDirection.normalized * shotImpulse, ForceMode2D.Impulse);
