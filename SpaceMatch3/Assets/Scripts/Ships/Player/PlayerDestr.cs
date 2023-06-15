@@ -2,12 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerShip : Ship
+public class PlayerDestr : Ship
 {
     // Start is called before the first frame update
     void Start()
     {
-        
+
+    }
+
+    public override void StartSettings()
+    {
+        base.StartSettings();
+
+        accuracy = 0.2f; //0.2f
+        shotImpulse = 17; //15
+        shotPower = 0.5f; //0.7
+        shieldEnergyMax = 2; //3
+        HPMax = 3.5f; //5
+        HP = HPMax;
+        energyMax = 5; //7
+        energy = energyMax;
+        minShotTime = 0.4f; //0.5
+        maxShotTime = 1.4f; //1.5
+        shotEnergyMax = 2;
+
+        updateLifeLine();
+        updateEnergyLine();
+        updateShieldLine();
+        updateShotLine();
     }
 
     public override void makeShot()
@@ -19,7 +41,7 @@ public class PlayerShip : Ship
         ObjectPulled.GetComponent<PlayerShot>()._harm = shotPower;
 
 
-        EnemyShip shipToAttack = EnemyFleetManager.instance.enemyFleet.Count == 1 ? EnemyFleetManager.instance.enemyFleet[0] :
+        Ship shipToAttack = EnemyFleetManager.instance.enemyFleet.Count == 1 ? EnemyFleetManager.instance.enemyFleet[0] :
                 EnemyFleetManager.instance.enemyFleet[Random.Range(0, EnemyFleetManager.instance.enemyFleet.Count)];
 
 
@@ -36,7 +58,7 @@ public class PlayerShip : Ship
         base.makeShot();
     }
 
-    
+
 
     public override void addToFleetManager()
     {

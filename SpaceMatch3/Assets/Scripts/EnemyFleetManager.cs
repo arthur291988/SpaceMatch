@@ -6,15 +6,15 @@ using UnityEngine;
 public class EnemyFleetManager : MonoBehaviour
 {
     [NonSerialized]
-    public List<EnemyShip> enemyFleet;
+    public List<Ship> enemyFleet;
     [NonSerialized]
-    public EnemyShip nextShipToEnergy;
+    public Ship nextShipToEnergy;
     [NonSerialized]
-    public EnemyShip nextShipToShot;
+    public Ship nextShipToShot;
     [NonSerialized]
-    public EnemyShip nextShipToHP;
+    public Ship nextShipToHP;
     [NonSerialized]
-    public EnemyShip nextShipToShield;
+    public Ship nextShipToShield;
 
     // Start is called before the first frame update
 
@@ -30,7 +30,7 @@ public class EnemyFleetManager : MonoBehaviour
     private void OnEnable()
     {
 
-        enemyFleet = new List<EnemyShip>();
+        enemyFleet = new List<Ship>();
     }
 
     //void Start()
@@ -56,7 +56,7 @@ public class EnemyFleetManager : MonoBehaviour
         else if (enemyFleet.Count>0) nextShipToEnergy = enemyFleet[0];
     }
 
-    public void assignNextShipToEnergyIfThisDestroyed(EnemyShip ship) {
+    public void assignNextShipToEnergyIfThisDestroyed(Ship ship) {
         if (ship == nextShipToEnergy) {
             if (enemyFleet.Count > 1)
             {
@@ -78,7 +78,7 @@ public class EnemyFleetManager : MonoBehaviour
         else if (enemyFleet.Count > 0) nextShipToHP = enemyFleet[0];
     }
 
-    public void assignNextShipToHPIfThisDestroyed(EnemyShip ship)
+    public void assignNextShipToHPIfThisDestroyed(Ship ship)
     {
         if (ship == nextShipToHP)
         {
@@ -102,7 +102,7 @@ public class EnemyFleetManager : MonoBehaviour
         else if (enemyFleet.Count > 0) nextShipToShot = enemyFleet[0];
     }
 
-    public void assignNextShipToShotIfThisDestroyed(EnemyShip ship)
+    public void assignNextShipToShotIfThisDestroyed(Ship ship)
     {
         if (ship == nextShipToShot)
         {
@@ -126,7 +126,7 @@ public class EnemyFleetManager : MonoBehaviour
         else if (enemyFleet.Count > 0) nextShipToShield = enemyFleet[0];
     }
 
-    public void assignNextShipToShieldIfThisDestroyed(EnemyShip ship)
+    public void assignNextShipToShieldIfThisDestroyed(Ship ship)
     {
         if (ship == nextShipToShield)
         {
@@ -145,7 +145,7 @@ public class EnemyFleetManager : MonoBehaviour
         {
             for (int i = 0; i < value; i++)
             {
-                nextShipToShot.shotEnergy++;
+                nextShipToShot.increaseShotPower();
                 assignNextShipToShot();
             }
         }
@@ -180,7 +180,7 @@ public class EnemyFleetManager : MonoBehaviour
 
     public void checkActionsOfFleet()
     {
-        foreach (EnemyShip ship in enemyFleet) ship.checkActions();
+        foreach (Ship ship in enemyFleet) ship.checkActions();
     }
 
 

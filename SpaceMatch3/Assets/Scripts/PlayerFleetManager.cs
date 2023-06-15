@@ -153,7 +153,7 @@ public class PlayerFleetManager : MonoBehaviour
         {
             for (int i = 0; i < value; i++)
             {
-                nextShipToShot.shotEnergy++;
+                nextShipToShot.increaseShotPower();
                 assignNextShipToShot();
             }
         }

@@ -50,14 +50,14 @@ SpriteAtlas:
     cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
+  - {fileID: 21300000, guid: 6e1da17207978d6479184911eca46fe5, type: 3}
   - {fileID: 21300000, guid: 1c937807ba1a4744c9bf67d84cec9c14, type: 3}
-  - {fileID: 21300000, guid: d8776a3753dede34395856eb10e5fbc7, type: 3}
-  - {fileID: 21300000, guid: a64b1ec98344fc94d86ebeed63b8e04e, type: 3}
+  - {fileID: 21300000, guid: ab78e3b8dc0073f4c96dc9f007d0d7a6, type: 3}
   - {fileID: 21300000, guid: 86dd8c2a326b89942afa704233cf9463, type: 3}
   m_PackedSpriteNamesToIndex:
+  - 2
   - 4
   - 3
-  - 2
   - 1
   m_RenderDataMap: {}
   m_Tag: TilesAtlas

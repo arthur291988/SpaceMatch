@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerFlagship : Ship
+public class EnemyFlagship : Ship
 {
     // Start is called before the first frame update
     void Start()
     {
 
     }
+
 
     public override void StartSettings()
     {
@@ -24,52 +25,56 @@ public class PlayerFlagship : Ship
         energy = energyMax;
         minShotTime = 0.7f; //0.5
         maxShotTime = 2f; //1.5
+        shotEnergyMax = 5;
 
         updateLifeLine();
         updateEnergyLine();
         updateShieldLine();
+        updateShotLine();
     }
+
 
     public override void makeShot()
     {
-        ObjectPulledList = ObjectPuller.current.GetPlayerFlagshipShotPullList();
+        ObjectPulledList = ObjectPuller.current.GetEnemyShotPullList();
         ObjectPulled = ObjectPuller.current.GetGameObjectFromPull(ObjectPulledList);
         bulletTransform = ObjectPulled.transform;
         bulletTransform.position = shipPosition;
-        ObjectPulled.GetComponent<PlayerShot>()._harm = shotPower;
+        ObjectPulled.GetComponent<EnemyShot>()._harm = shotPower;
 
-
-        EnemyShip shipToAttack = EnemyFleetManager.instance.enemyFleet.Count == 1 ? EnemyFleetManager.instance.enemyFleet[0] :
-                EnemyFleetManager.instance.enemyFleet[Random.Range(0, EnemyFleetManager.instance.enemyFleet.Count)];
-
+        Ship shipToAttack = PlayerFleetManager.instance.playerFleet.Count == 1 ? PlayerFleetManager.instance.playerFleet[0] :
+                PlayerFleetManager.instance.playerFleet[Random.Range(0, PlayerFleetManager.instance.playerFleet.Count)];
 
         attackDirection = shipToAttack.shipPosition;
 
         attackDirection -= shipPosition;
         attackDirection = RotateAttackVector(attackDirection, Random.Range(-accuracy, accuracy));
-
         bulletTransform.rotation = Quaternion.FromToRotation(bulletRotateBase, attackDirection);
         ObjectPulled.SetActive(true);
 
         ObjectPulled.GetComponent<Rigidbody2D>().AddForce(attackDirection.normalized * shotImpulse, ForceMode2D.Impulse);
 
+
         base.makeShot();
     }
 
-
-
     public override void addToFleetManager()
     {
-        PlayerFleetManager.instance.playerFleet.Add(this);
+        EnemyFleetManager.instance.enemyFleet.Add(this);
     }
     public override void removeFromFleetManager()
     {
-        PlayerFleetManager.instance.assignNextShipToEnergyIfThisDestroyed(this);
-        PlayerFleetManager.instance.assignNextShipToHPIfThisDestroyed(this);
-        PlayerFleetManager.instance.assignNextShipToShotIfThisDestroyed(this);
-        PlayerFleetManager.instance.assignNextShipToShieldIfThisDestroyed(this);
-        PlayerFleetManager.instance.playerFleet.Remove(this);
+        EnemyFleetManager.instance.assignNextShipToEnergyIfThisDestroyed(this);
+        EnemyFleetManager.instance.assignNextShipToHPIfThisDestroyed(this);
+        EnemyFleetManager.instance.assignNextShipToShotIfThisDestroyed(this);
+        EnemyFleetManager.instance.assignNextShipToShieldIfThisDestroyed(this);
+        EnemyFleetManager.instance.enemyFleet.Remove(this);
 
     }
+    // Update is called once per frame
+    void Update()
+    {
 
+    }
 }
+

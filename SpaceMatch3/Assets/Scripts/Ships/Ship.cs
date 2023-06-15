@@ -20,6 +20,8 @@ public class Ship : MonoBehaviour
     [NonSerialized]
     public float shotEnergy;
     [NonSerialized]
+    public float shotEnergyMax;
+    [NonSerialized]
     public float shotPower;
     [NonSerialized]
     public GameObject _gameObject;
@@ -66,6 +68,10 @@ public class Ship : MonoBehaviour
     [NonSerialized]
     public MaterialPropertyBlock matBlockOfEnergyLineSprite;
 
+    public SpriteRenderer _spriteRendererOfShotLine;
+    [NonSerialized]
+    public MaterialPropertyBlock matBlockOfShotLineSprite;
+
     [NonSerialized]
     public Transform bulletTransform;
     [NonSerialized]
@@ -83,9 +89,11 @@ public class Ship : MonoBehaviour
         if (matBlockOfLifeLineSprite == null) matBlockOfLifeLineSprite = new MaterialPropertyBlock();
         if (matBlockOfShieldLineSprite == null) matBlockOfShieldLineSprite = new MaterialPropertyBlock();
         if (matBlockOfEnergyLineSprite == null) matBlockOfEnergyLineSprite = new MaterialPropertyBlock();
+        if (matBlockOfShotLineSprite == null) matBlockOfShotLineSprite = new MaterialPropertyBlock();
         shipPosition = (Vector2)_transform.position;
         addToFleetManager();
         shieldCumulation = 0;
+        shotEnergy = 0;
         bulletRotateBase = new Vector2(shipPosition.x, shipPosition.y + 1) - shipPosition;
 
        
@@ -120,6 +128,12 @@ public class Ship : MonoBehaviour
         _spriteRendererOfEnergyLine.SetPropertyBlock(matBlockOfEnergyLineSprite);
     }
 
+    public void updateShotLine()
+    {
+        _spriteRendererOfShotLine.GetPropertyBlock(matBlockOfShotLineSprite);
+        matBlockOfShotLineSprite.SetFloat("_Fill", shotEnergy / shotEnergyMax);
+        _spriteRendererOfShotLine.SetPropertyBlock(matBlockOfShotLineSprite);
+    }
 
     public void reduceHP(float value) {
         HP -= value;
@@ -156,6 +170,8 @@ public class Ship : MonoBehaviour
         consumeEnergy(shotPower);
         shotEnergy -= shotPower;
         StartCoroutine (makeExtraShot());
+
+        updateShotLine();
     }
     public IEnumerator makeExtraShot()
     {
@@ -209,6 +225,14 @@ public class Ship : MonoBehaviour
         HP += value; 
         if (HP > HPMax) HP = HPMax;
         updateLifeLine();
+    }
+
+
+    public void increaseShotPower() {
+        shotEnergy++;
+        if (shotEnergyMax < shotEnergy) shotEnergy = shotEnergyMax;
+
+        updateShotLine();
     }
 
     //Rotates the attack vector to add some randomness
