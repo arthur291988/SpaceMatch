@@ -40,9 +40,9 @@ public class EnemyShot : Shot
         _trailRenderer.Clear();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
+    //// Update is called once per frame
+    //void Update()
+    //{
         
-    }
+    //}
 }

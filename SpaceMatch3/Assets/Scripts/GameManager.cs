@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,14 @@ public class GameManager : MonoBehaviour
 
     private float xStep;
 
+    public float hardnessLevel; //0-easey 1-medium 2-hard
+
+    private bool fightIsOn;
+    [SerializeField]
+    private GameObject coverBoard;
+
+    [NonSerialized]
+    public List<Shot> shotsOnScene;
 
     private void Awake()
     {
@@ -23,10 +32,13 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        shotsOnScene = new List<Shot>();
         instantiateEnemyFleet();
         instantiatePlayerFleet();
         PlayerFleetManager.instance.startSettings();
         EnemyFleetManager.instance.startSettings();
+        hardnessLevel = 0;
+        fightIsOn = false;
     }
 
     private void instantiateEnemyFleet() {
@@ -78,6 +90,54 @@ public class GameManager : MonoBehaviour
             ship.activatePowerShiledOnStart();
         }
 
+    }
+
+    public bool getFightIsOn() {
+        return fightIsOn;
+    }
+
+    public void setFightOn(bool state)
+    {
+        fightIsOn = state;
+        coverBoard.SetActive(state);
+    }
+
+    public void addShot(Shot shot)
+    {
+        shotsOnScene.Add(shot);
+        if (!fightIsOn) setFightOn(true);
+    }
+    public void removeShot(Shot shot)
+    {
+        shotsOnScene.Remove(shot);
+        if (shotsOnScene.Count < 1 && checkAllShipsIfActionIsFinished())
+            setFightOn(false);
+    }
+
+    public bool checkAllShipsIfActionIsFinished()
+    {
+        bool isFinished = true;
+        foreach (Ship ship in PlayerFleetManager.instance.playerFleet)
+        {
+            if (ship.actionsAreOn)
+            {
+                isFinished = false;
+                break;
+            }
+        }
+        if (isFinished)
+        {
+            foreach (Ship ship in EnemyFleetManager.instance.enemyFleet)
+            {
+                if (ship.actionsAreOn)
+                {
+                    isFinished = false;
+                    break;
+                }
+            }
+        }
+
+        return isFinished;
     }
 
     // Update is called once per frame

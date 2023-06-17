@@ -244,7 +244,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 413c38159fe3617439af7b57488c888f, type: 3}
-  m_Color: {r: 0.2783019, g: 0.5984559, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.043137256, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -406,6 +406,7 @@ MonoBehaviour:
   _spriteRendererOfLifeLine: {fileID: 1959340342}
   _spriteRendererOfShieldLine: {fileID: 1442602784}
   _spriteRendererOfEnergyLine: {fileID: 348665956751721425}
+  _spriteRendererOfShotLine: {fileID: 0}
 --- !u!1 &5311269168736178412
 GameObject:
   m_ObjectHideFlags: 0

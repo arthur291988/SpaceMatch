@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerFlagship : Ship
+public class PlayerFlagship : PlayerShip
 {
-    // Start is called before the first frame update
-    void Start()
-    {
+    //// Start is called before the first frame update
+    //void Start()
+    //{
 
-    }
+    //}
 
     public override void StartSettings()
     {
@@ -38,7 +38,9 @@ public class PlayerFlagship : Ship
         ObjectPulled = ObjectPuller.current.GetGameObjectFromPull(ObjectPulledList);
         bulletTransform = ObjectPulled.transform;
         bulletTransform.position = shipPosition;
-        ObjectPulled.GetComponent<PlayerShot>()._harm = shotPower;
+        PlayerShot shot = ObjectPulled.GetComponent<PlayerShot>();
+        if (!shot.isActiveAndEnabled) shot.enabled = true;
+        shot._harm = shotPower;
 
 
         Ship shipToAttack = EnemyFleetManager.instance.enemyFleet.Count == 1 ? EnemyFleetManager.instance.enemyFleet[0] :
@@ -48,7 +50,7 @@ public class PlayerFlagship : Ship
         attackDirection = shipToAttack.shipPosition;
 
         attackDirection -= shipPosition;
-        attackDirection = RotateAttackVector(attackDirection, Random.Range(-accuracy, accuracy));
+        if (aimingCount == 0) attackDirection = RotateAttackVector(attackDirection, Random.Range(-accuracy, accuracy)); //if ship has aiming its vector is not disordered by accuracy
 
         bulletTransform.rotation = Quaternion.FromToRotation(bulletRotateBase, attackDirection);
         ObjectPulled.SetActive(true);
@@ -60,18 +62,18 @@ public class PlayerFlagship : Ship
 
 
 
-    public override void addToFleetManager()
-    {
-        PlayerFleetManager.instance.playerFleet.Add(this);
-    }
-    public override void removeFromFleetManager()
-    {
-        PlayerFleetManager.instance.assignNextShipToEnergyIfThisDestroyed(this);
-        PlayerFleetManager.instance.assignNextShipToHPIfThisDestroyed(this);
-        PlayerFleetManager.instance.assignNextShipToShotIfThisDestroyed(this);
-        PlayerFleetManager.instance.assignNextShipToShieldIfThisDestroyed(this);
-        PlayerFleetManager.instance.playerFleet.Remove(this);
+    //public override void addToFleetManager()
+    //{
+    //    PlayerFleetManager.instance.playerFleet.Add(this);
+    //}
+    //public override void removeFromFleetManager()
+    //{
+    //    PlayerFleetManager.instance.assignNextShipToEnergyIfThisDestroyed(this);
+    //    PlayerFleetManager.instance.assignNextShipToHPIfThisDestroyed(this);
+    //    PlayerFleetManager.instance.assignNextShipToShotIfThisDestroyed(this);
+    //    PlayerFleetManager.instance.assignNextShipToShieldIfThisDestroyed(this);
+    //    PlayerFleetManager.instance.playerFleet.Remove(this);
 
-    }
+    //}
 
 }

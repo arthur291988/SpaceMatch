@@ -55,6 +55,12 @@ public class Tile : MonoBehaviour
 
     public Animator animator;
 
+
+    [NonSerialized]
+    public GameObject ObjectPulled;
+    [NonSerialized]
+    public List<GameObject> ObjectPulledList;
+
     //private void OnEnable()
     //{
     //    isMoving=false;
@@ -91,7 +97,16 @@ public class Tile : MonoBehaviour
         isMoving = false;
         isControlTile = false;
         _transform.localScale = Vector3.one;
+        makeBurst();
         _gameObject.SetActive(false);
+    }
+
+    private void makeBurst()
+    {
+        ObjectPulledList = ObjectPuller.current.GetBurstList(indexOfResource);
+        ObjectPulled = ObjectPuller.current.GetGameObjectFromPull(ObjectPulledList);
+        ObjectPulled.transform.position = _transform.position;
+        ObjectPulled.SetActive(true);
     }
 
     private void OnMouseDown() //6
@@ -130,7 +145,7 @@ public class Tile : MonoBehaviour
 
     private void OnMouseDrag()
     {
-        if (!GridManager.Instance.isSwiping && swipeSessionStarted && !GridManager.Instance.isSwipingBack && !GridManager.Instance.tilesAreMoving /*&& SeasonsManager.Instance.getSteps() > 0*/)
+        if (!GridManager.Instance.isSwiping && swipeSessionStarted && !GridManager.Instance.isSwipingBack && !GridManager.Instance.tilesAreMoving && !GameManager.instance.getFightIsOn())
         {
             touchDragPos = CommonData.Instance._camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
             if ((touchDragPos - touchStartPos).magnitude > maxSwipeDistance)

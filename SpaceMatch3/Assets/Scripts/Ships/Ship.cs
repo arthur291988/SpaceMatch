@@ -33,6 +33,8 @@ public class Ship : MonoBehaviour
     public float shieldEnergyMax;
     [NonSerialized]
     public float shieldCumulation;
+    [NonSerialized]
+    public int aimingCount;
 
 
     [NonSerialized]
@@ -56,6 +58,8 @@ public class Ship : MonoBehaviour
     public GameObject shield;
     public Shield shieldClass;
 
+    public GameObject aimingObj;
+
     public SpriteRenderer _spriteRendererOfLifeLine;
     [NonSerialized]
     public MaterialPropertyBlock matBlockOfLifeLineSprite;
@@ -77,6 +81,11 @@ public class Ship : MonoBehaviour
     [NonSerialized]
     public Vector2 bulletRotateBase;
 
+    [NonSerialized]
+    public bool shotingCoroutineIsOn;
+    [NonSerialized]
+    public bool actionsAreOn;
+
 
     // Start is called before the first frame update
     void Start()
@@ -95,8 +104,10 @@ public class Ship : MonoBehaviour
         shieldCumulation = 0;
         shotEnergy = 0;
         bulletRotateBase = new Vector2(shipPosition.x, shipPosition.y + 1) - shipPosition;
-
-       
+        aimingCount = 0;
+        aimingObj.SetActive(false);
+        shotingCoroutineIsOn = false;
+        actionsAreOn = false;
     }
 
 
@@ -160,28 +171,42 @@ public class Ship : MonoBehaviour
         _gameObject.SetActive(false);
     }
 
-    public bool canShot() {
-        if (shotEnergy >= shotPower && shotPower <= energy) return true;
-        else return false;
+    public virtual bool canShot() {
+        return false;
     }
 
     public virtual void makeShot()
     {
+        actionsAreOn = true;
         consumeEnergy(shotPower);
         shotEnergy -= shotPower;
-        StartCoroutine (makeExtraShot());
-
+        if (canShot())
+        {
+            shotingCoroutineIsOn = true;
+            StartCoroutine(makeExtraShot());
+        }
+        if (aimingCount>0) aimingCount--;
+        if (aimingObj.activeInHierarchy && aimingCount<=0) aimingObj.SetActive(false);
         updateShotLine();
+        if (!shotingCoroutineIsOn) {
+            actionsAreOn = false;
+            //GameManager.instance.checkAllShipsIfActionIsFinished();
+        }
     }
     public IEnumerator makeExtraShot()
     {
         yield return new WaitForSeconds(UnityEngine.Random.Range(minShotTime, maxShotTime));
+        shotingCoroutineIsOn = false;
         if (canShot()) makeShot();
     }
 
     public void checkActions() {
-        if (canShot()) makeShot();
+        if (canShot())
+        {
+            makeShot();
+        }
         if (shieldCumulation >= shieldEnergyMax && shieldEnergyMax <= energy) activatePowerShiled(); //power shield activation is less important then shot
+        //GameManager.instance.checkAllShipsIfActionIsFinished();
     }
 
     public void cumulateShiled(float value) {
@@ -233,6 +258,12 @@ public class Ship : MonoBehaviour
         if (shotEnergyMax < shotEnergy) shotEnergy = shotEnergyMax;
 
         updateShotLine();
+    }
+
+    public void increaseAimingCount()
+    {
+        aimingCount++;
+        if (!aimingObj.activeInHierarchy) aimingObj.SetActive(true);    
     }
 
     //Rotates the attack vector to add some randomness

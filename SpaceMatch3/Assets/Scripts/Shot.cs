@@ -32,6 +32,7 @@ public class Shot : MonoBehaviour
         if (_gameObject == null) _gameObject = gameObject;
         if (_shotTransform == null) _shotTransform = transform;
         if (_shotRigidBody2D == null) _shotRigidBody2D = GetComponent<Rigidbody2D>();
+        GameManager.instance.addShot(this);
     }
 
     public virtual void OnCollisionEnter2D(Collision2D collision)
@@ -47,6 +48,7 @@ public class Shot : MonoBehaviour
 
     public void disactivateShot()
     {
+        GameManager.instance.removeShot(this);
         _gameObject.SetActive(false);
 
     }
@@ -55,9 +57,9 @@ public class Shot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_shotTransform.position.y > CommonData.Instance.vertScreenSize / 2 + 1 || _shotTransform.position.y < -CommonData.Instance.vertScreenSize / 2 - 1)
+        if (_shotTransform.position.y > CommonData.Instance.vertScreenSize / 2 + 1 || _shotTransform.position.y < CommonData.Instance.vertScreenSize / -2 - 1)
         {
-            _gameObject.SetActive(false);
+            disactivateShot();
         }
     }
 }

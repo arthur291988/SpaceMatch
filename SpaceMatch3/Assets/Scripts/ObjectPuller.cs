@@ -10,6 +10,7 @@ public class ObjectPuller : MonoBehaviour
     private int pullOfObjects100 = 100;
     private int pullOfObjects20 = 20;
     private int pullOfObjects10 = 10;
+    private int pullOfObjects15 = 15;
     private bool willGrow;
 
 
@@ -25,12 +26,27 @@ public class ObjectPuller : MonoBehaviour
     [SerializeField]
     private GameObject enemyShip;
 
+    [SerializeField]
+    private GameObject HPBurst;
+    [SerializeField]
+    private GameObject ShotBurst;
+    [SerializeField]
+    private GameObject EnergyBurst;
+    [SerializeField]
+    private GameObject ShieldBurst;
+
     private List<GameObject> TilesList;
     private List<GameObject> enemyShotList;
     private List<GameObject> playerFlagshipShotList;
 
     private List<GameObject> enemyShipList;
     private List<GameObject> playerFlagshipList;
+
+
+    private List<GameObject> HPBurstList;
+    private List<GameObject> ShotBurstList;
+    private List<GameObject> EnergyBurstList;
+    private List<GameObject> ShieldBurstList;
 
 
     private void Awake()
@@ -48,6 +64,11 @@ public class ObjectPuller : MonoBehaviour
 
         enemyShipList = new List<GameObject>();
         playerFlagshipList = new List<GameObject>();
+
+        HPBurstList = new List<GameObject>();
+        ShotBurstList = new List<GameObject>();
+        EnergyBurstList = new List<GameObject>();
+        ShieldBurstList = new List<GameObject>();
 
 
         for (int i = 0; i < pullOfObjects100; i++)
@@ -82,6 +103,27 @@ public class ObjectPuller : MonoBehaviour
 
         }
 
+        for (int i = 0; i < pullOfObjects15; i++)
+        {
+            GameObject obj1 = Instantiate(HPBurst);
+            obj1.SetActive(false);
+            HPBurstList.Add(obj1);
+
+            GameObject obj2 = Instantiate(ShotBurst);
+            obj2.SetActive(false);
+            ShotBurstList.Add(obj2);
+
+            GameObject obj = Instantiate(ShieldBurst);
+            obj.SetActive(false);
+            ShieldBurstList.Add(obj);
+
+
+            GameObject obj0 = Instantiate(EnergyBurst);
+            obj0.SetActive(false);
+            EnergyBurstList.Add(obj0);
+
+        }
+
     }
 
     public List<GameObject> GetTilePullList()
@@ -104,6 +146,14 @@ public class ObjectPuller : MonoBehaviour
     public List<GameObject> GetEnemyShipPullList()
     {
         return enemyShipList;
+    }
+
+    public List<GameObject> GetBurstList(int index)
+    {
+        if (index==0) return ShotBurstList;
+        else if (index == 1) return EnergyBurstList;
+        else if (index == 2) return ShieldBurstList;
+        else return HPBurstList;
     }
 
 

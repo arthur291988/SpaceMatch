@@ -139,7 +139,7 @@ public class EnemyFleetManager : MonoBehaviour
         }
     }
 
-    public void distributeResources(int index, int value)
+    public void distributeResources(int index, int value, int comboValue)
     {
         if (index == 0)
         {
@@ -175,7 +175,120 @@ public class EnemyFleetManager : MonoBehaviour
                 assignNextShipToHP();
             }
         }
-        
+        //aiming add accures randomely
+        else if (index == 4)
+        {
+            if (enemyFleet.Count > 0)
+            {
+                for (int i = 0; i < value; i++)
+                {
+                    enemyFleet[UnityEngine.Random.Range(0, enemyFleet.Count)].increaseAimingCount();
+                }
+            }
+        }
+        if (comboValue > 3) processComno(index, comboValue);
+
+    }
+
+    public void processComno(int index, int comboValue)
+    {
+        if (comboValue == 4)
+        {
+            distributeResources(UnityEngine.Random.Range(0, 5), 2, 0); //0 is default, 2 meanse two additional random resource
+        }
+
+        //0 - shot, 1 - energy, 2 - shield, 3 - HP 
+        if (comboValue == 5)
+        {
+            if (index == 0)
+            {
+                distributeResources(4, 3, 0); //4 is aim, 3 - value, 0 is default no combo call, 
+                distributeResources(1, 3, 0); //1 is energy, 3 - value, 0 is default no combo call, 
+                distributeResources(0, 2, 0); //0 is shot, 2 - value, 0 is default no combo call, 
+            }
+            if (index == 1)
+            {
+                distributeResources(2, 3, 0);
+                distributeResources(4, 1, 0);
+                distributeResources(0, 2, 0);
+            }
+            if (index == 2)
+            {
+                distributeResources(1, 3, 0);
+                distributeResources(3, 3, 0);
+                distributeResources(4, 1, 0);
+            }
+            if (index == 3)
+            {
+                distributeResources(1, 3, 0);
+                distributeResources(2, 3, 0);
+                distributeResources(4, 1, 0);
+            }
+        }
+        if (comboValue == 6)
+        {
+            if (index == 0)
+            {
+                distributeResources(4, 5, 0);
+                distributeResources(1, 4, 0);
+                distributeResources(0, 2, 0);
+                distributeResources(3, 2, 0);
+            }
+            if (index == 1)
+            {
+                distributeResources(2, 4, 0);
+                distributeResources(0, 3, 0);
+                distributeResources(1, 2, 0);
+                distributeResources(3, 2, 0);
+                distributeResources(4, 2, 0);
+            }
+            if (index == 2)
+            {
+                distributeResources(3, 5, 0);
+                distributeResources(1, 3, 0);
+                distributeResources(4, 2, 0);
+                distributeResources(0, 2, 0);
+            }
+            if (index == 3)
+            {
+                distributeResources(1, 3, 0);
+                distributeResources(2, 3, 0);
+                distributeResources(0, 2, 0);
+                distributeResources(4, 2, 0);
+            }
+        }
+        if (comboValue == 7)
+        {
+            if (index == 0)
+            {
+                distributeResources(4, 7, 0);
+                distributeResources(1, 6, 0);
+                distributeResources(0, 3, 0);
+                distributeResources(3, 3, 0);
+            }
+            if (index == 1)
+            {
+                distributeResources(2, 6, 0);
+                distributeResources(0, 5, 0);
+                distributeResources(1, 3, 0);
+                distributeResources(3, 2, 0);
+                distributeResources(4, 3, 0);
+            }
+            if (index == 2)
+            {
+                distributeResources(3, 7, 0);
+                distributeResources(1, 5, 0);
+                distributeResources(4, 3, 0);
+                distributeResources(0, 3, 0);
+            }
+            if (index == 3)
+            {
+                distributeResources(1, 5, 0);
+                distributeResources(2, 5, 0);
+                distributeResources(0, 4, 0);
+                distributeResources(4, 3, 0);
+            }
+        }
     }
 
     public void checkActionsOfFleet()

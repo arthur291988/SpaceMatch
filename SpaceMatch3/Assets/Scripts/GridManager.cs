@@ -326,8 +326,8 @@ public class GridManager : MonoBehaviour
         }
 
         //adding according resources if there is more than one resource matched, if only one then added only so
-        PlayerFleetManager.instance.distributeResources(index1, index1Value);
-        if (index2Value > 0) PlayerFleetManager.instance.distributeResources(index2, index2Value);
+        PlayerFleetManager.instance.distributeResources(index1, index1Value, index1Value);
+        if (index2Value > 0) PlayerFleetManager.instance.distributeResources(index2, index2Value, index2Value);
 
         for (int i = 0; i < toDisactivateTiles.Count; i++)
         {
@@ -425,21 +425,48 @@ public class GridManager : MonoBehaviour
         }
         else
         {
+            //GameManager.instance.setFightOn(true);
             PlayerFleetManager.instance.checkActionsOfFleet();
-
-
-            //CPU turn loop
-            int iteration = UnityEngine.Random.Range(0, 4)<3? UnityEngine.Random.Range(1, 3): UnityEngine.Random.Range(2, 7); 
-            for (int i = 0; i < iteration; i++)
-            {
-                int index = UnityEngine.Random.Range(0, 4);
-                int value = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(3, 5) : UnityEngine.Random.Range(4, 8);
-                EnemyFleetManager.instance.distributeResources(index, value);
-            }
-            EnemyFleetManager.instance.checkActionsOfFleet();
-            //CityManager.Instance.startConsume();
-            //if (SeasonsManager.Instance.getSteps() < 1) StartCoroutine(SeasonsManager.Instance.endSeason());
+            CPUAttackProcess();
+            //GameManager.instance.checkAllShipsIfActionIsFinished();
         }
+    }
+
+    private void CPUAttackProcess()
+    { //CPU turn loop
+        int iteration=0;
+        if (GameManager.instance.hardnessLevel == 0)
+        {
+            iteration = UnityEngine.Random.Range(0, 4) < 3 ? UnityEngine.Random.Range(1, 3) : UnityEngine.Random.Range(2, 7);
+        }
+        else if (GameManager.instance.hardnessLevel == 1)
+        {
+            iteration = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(1, 4) : UnityEngine.Random.Range(3, 7);
+        }
+        else if (GameManager.instance.hardnessLevel == 2)
+        {
+            iteration = UnityEngine.Random.Range(0, 2) < 1 ? UnityEngine.Random.Range(1, 4) : UnityEngine.Random.Range(4, 7);
+        }
+
+        for (int i = 0; i < iteration; i++)
+        {
+            int index = UnityEngine.Random.Range(0, 4);
+            int value = 3;
+            if (GameManager.instance.hardnessLevel == 0)
+            {
+                value = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(3, 5) : UnityEngine.Random.Range(4, 8);
+            }
+            else if (GameManager.instance.hardnessLevel == 1)
+            {
+                value = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(3, 6) : UnityEngine.Random.Range(4, 8);
+            }
+            else if (GameManager.instance.hardnessLevel == 2)
+            {
+                value = UnityEngine.Random.Range(0, 2) < 1 ? UnityEngine.Random.Range(3, 7) : UnityEngine.Random.Range(4, 8);
+            }
+            EnemyFleetManager.instance.distributeResources(index, value, value);
+        }
+        EnemyFleetManager.instance.checkActionsOfFleet();
     }
 
     //set false swipe match because the following chain checks only combo matches
