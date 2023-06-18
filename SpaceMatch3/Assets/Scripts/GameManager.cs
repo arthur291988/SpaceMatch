@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -23,6 +24,19 @@ public class GameManager : MonoBehaviour
     [NonSerialized]
     public List<Shot> shotsOnScene;
 
+    //[NonSerialized]
+    //public float turnTimeUp;
+    //[NonSerialized]
+    //public float turnTimeDown;
+    //[NonSerialized]
+    //public float turnTimeMax;
+
+    //private bool timerIsOn;
+
+    //public GameObject timerObj;
+    //public Image UpTimerImg;
+    //public Image DownTimerImg;
+
     private void Awake()
     {
         instance = this;
@@ -39,13 +53,45 @@ public class GameManager : MonoBehaviour
         EnemyFleetManager.instance.startSettings();
         hardnessLevel = 0;
         fightIsOn = false;
+        //turnTimeMax = 7;
+
+        //turnTimeUp = 7;
+        //turnTimeDown = 0;
+        //setTheTimer();
     }
+
+    //private void setTheTimer() {
+    //    turnTimeUp = turnTimeMax;
+    //    UpTimerImg.fillAmount = turnTimeUp;
+    //    turnTimeDown = 0;
+    //    DownTimerImg.fillAmount = turnTimeDown;
+    //    if (!timerObj.activeInHierarchy) timerObj.SetActive(true);
+    //    timerIsOn = true;
+    //}
+
+    //private void updateTimerUI ()
+    //{
+    //    UpTimerImg.fillAmount = turnTimeUp/ turnTimeMax;
+    //    DownTimerImg.fillAmount = turnTimeDown / turnTimeMax;
+    //}
+
+    //public void stopTheTimer()
+    //{
+    //    timerIsOn = false;
+    //    timerObj.SetActive(false);
+    //    Invoke("startTimerIfNoAttack", 1);
+    //}
+
+    //private void startTimerIfNoAttack()
+    //{
+    //    if (!fightIsOn && !GridManager.Instance.tilesAreMoving) setTheTimer();
+    //}
 
     private void instantiateEnemyFleet() {
         float xStepLocal=0;
         for (int i =0;i<5;i++) {
 
-            ObjectPulledList = ObjectPuller.current.GetEnemyShipPullList();
+            ObjectPulledList = ObjectPuller.current.GetEnemyShipPullList(2);
             ObjectPulled = ObjectPuller.current.GetGameObjectFromPull(ObjectPulledList);
 
             if (i == 0) ObjectPulled.transform.position = new Vector2(0, 11);
@@ -71,7 +117,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 5; i++)
         {
 
-            ObjectPulledList = ObjectPuller.current.GetPlayerFlagshipPullList();
+            ObjectPulledList = ObjectPuller.current.GetPlayerShipPullList(2);
             ObjectPulled = ObjectPuller.current.GetGameObjectFromPull(ObjectPulledList);
 
             if (i == 0) ObjectPulled.transform.position = Vector2.zero;
@@ -100,6 +146,7 @@ public class GameManager : MonoBehaviour
     {
         fightIsOn = state;
         coverBoard.SetActive(state);
+        //if (!fightIsOn) setTheTimer();
     }
 
     public void addShot(Shot shot)
@@ -141,8 +188,16 @@ public class GameManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    //void Update()
+    //{
+    //    if (!fightIsOn && timerIsOn) {
+    //        turnTimeUp-=0.02f;
+    //        turnTimeDown += 0.02f;
+    //        updateTimerUI();
+    //        if (turnTimeUp <= 0) {
+    //            stopTheTimer();
+    //            GridManager.Instance.CPUAttackProcess();
+    //        } 
+    //    }
+    //}
 }

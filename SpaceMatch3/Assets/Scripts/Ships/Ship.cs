@@ -1,11 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Burst.Intrinsics;
-using Unity.Mathematics;
 using UnityEngine;
-using static UnityEngine.EventSystems.EventTrigger;
-using static UnityEngine.Rendering.DebugUI;
 
 public class Ship : MonoBehaviour
 {
@@ -59,6 +55,8 @@ public class Ship : MonoBehaviour
     public Shield shieldClass;
 
     public GameObject aimingObj;
+    public GameObject preBursteffec;
+    public ParticleSystem shotEffect;
 
     public SpriteRenderer _spriteRendererOfLifeLine;
     [NonSerialized]
@@ -86,6 +84,7 @@ public class Ship : MonoBehaviour
     [NonSerialized]
     public bool actionsAreOn;
 
+    public int indexOfShip;
 
     // Start is called before the first frame update
     void Start()
@@ -106,14 +105,15 @@ public class Ship : MonoBehaviour
         bulletRotateBase = new Vector2(shipPosition.x, shipPosition.y + 1) - shipPosition;
         aimingCount = 0;
         aimingObj.SetActive(false);
+        preBursteffec.SetActive(false);
         shotingCoroutineIsOn = false;
         actionsAreOn = false;
     }
 
 
 
-    public virtual void addToFleetManager() { 
-    
+    public virtual void addToFleetManager() {
+
     }
     public virtual void removeFromFleetManager()
     {
@@ -151,16 +151,17 @@ public class Ship : MonoBehaviour
         updateLifeLine();
         if (HP < 0) HP = 0;
         if (HP == 0) disactivateShip();
+        if (!preBursteffec.activeInHierarchy && HP <= HPMax * 0.3f) preBursteffec.SetActive(true);
     }
 
-    public void consumeEnergy(float value) { 
+    public void consumeEnergy(float value) {
         energy -= value;
         updateEnergyLine();
     }
 
     public void increaseEnergy(float value)
     {
-        if (energy<energyMax) energy += value;
+        if (energy < energyMax) energy += value;
         if (energy > energyMax) energy = energyMax;
         updateEnergyLine();
     }
@@ -168,7 +169,15 @@ public class Ship : MonoBehaviour
     public void disactivateShip()
     {
         removeFromFleetManager();
+        makeBurst();
         _gameObject.SetActive(false);
+    }
+
+    public virtual void makeBurst()
+    {
+        ObjectPulled = ObjectPuller.current.GetGameObjectFromPull(ObjectPulledList);
+        ObjectPulled.transform.position = _transform.position;
+        ObjectPulled.SetActive(true);
     }
 
     public virtual bool canShot() {
@@ -177,6 +186,7 @@ public class Ship : MonoBehaviour
 
     public virtual void makeShot()
     {
+        shotEffect.Play();
         actionsAreOn = true;
         consumeEnergy(shotPower);
         shotEnergy -= shotPower;
@@ -249,6 +259,7 @@ public class Ship : MonoBehaviour
     public void healHP(float value) {
         HP += value; 
         if (HP > HPMax) HP = HPMax;
+        if (preBursteffec.activeInHierarchy && HP > HPMax * 0.3f) preBursteffec.SetActive(false);
         updateLifeLine();
     }
 

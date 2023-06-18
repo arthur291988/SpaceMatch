@@ -37,12 +37,12 @@ public class PlayerFleetManager : MonoBehaviour
         playerFleet = new List<Ship>();
     }
 
-    void Start()
-    {
-        Debug.Log(CommonData.Instance.vertScreenSize / 2 + 1);
-        Debug.Log(CommonData.Instance.vertScreenSize / -2 - 1);
+    //void Start()
+    //{
+    //    Debug.Log(CommonData.Instance.vertScreenSize / 2 + 1);
+    //    Debug.Log(CommonData.Instance.vertScreenSize / -2 - 1);
 
-    }
+    //}
     public void startSettings()
     {
         nextShipToEnergy = playerFleet[0];
@@ -198,10 +198,10 @@ public class PlayerFleetManager : MonoBehaviour
                 }
             }
         }
-        if (comboValue > 3) processComno(index, comboValue);
+        if (comboValue > 3) processCombo(index, comboValue);
     }
 
-    public void processComno(int index, int comboValue) {
+    public void processCombo(int index, int comboValue) {
         if (comboValue == 4) {
             distributeResources(UnityEngine.Random.Range(0,5),2,0); //0 is default, 2 meanse two additional random resource
         }

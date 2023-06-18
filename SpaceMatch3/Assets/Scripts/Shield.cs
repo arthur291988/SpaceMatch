@@ -10,10 +10,18 @@ public class Shield : MonoBehaviour
     [NonSerialized]
     public float shieldEnergyMax;
     private GameObject _gameObject;
+    private Transform _transform;
+    private Vector2 _position;
 
     public SpriteRenderer _spriteRendererOfShieldLine;
     [NonSerialized]
     public MaterialPropertyBlock matBlockOfShieldLineSprite;
+
+
+    [NonSerialized]
+    public GameObject ObjectPulled;
+    [NonSerialized]
+    public List<GameObject> ObjectPulledList;
 
 
     // Start is called before the first frame update
@@ -25,6 +33,8 @@ public class Shield : MonoBehaviour
     private void OnEnable()
     {
         if (matBlockOfShieldLineSprite == null) matBlockOfShieldLineSprite = new MaterialPropertyBlock();
+        if (_transform == null) _transform = transform;
+        _position = _transform.position;
     }
 
     public void reduceShield(float value)
@@ -44,7 +54,16 @@ public class Shield : MonoBehaviour
 
     public void disactivateShield()
     {
+        makeBurst();
         _gameObject.SetActive(false);
+    }
+
+    public void makeBurst()
+    {
+        ObjectPulledList = ObjectPuller.current.GetShieldBurstList();
+        ObjectPulled = ObjectPuller.current.GetGameObjectFromPull(ObjectPulledList);
+        ObjectPulled.transform.position = _position;
+        ObjectPulled.SetActive(true);
     }
 
 }

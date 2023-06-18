@@ -15,16 +15,18 @@ public class EnemyShot : Shot
     {
         if (collision.gameObject.TryGetComponent<Ship>(out Ship ship))
         {
+            base.OnCollisionEnter2D(collision);
             ship.reduceHP(_harm);
-            disactivateShot();
+            disactivateShot(true);
         }
 
         if (collision.gameObject.TryGetComponent<PlayerShot>(out PlayerShot shot))
         {
-            disactivateShot();
+            base.OnCollisionEnter2D(collision);
+            disactivateShot(true);
         }
 
-        _trailRenderer.Clear();
+        //_trailRenderer.Clear();
 
     }
 
@@ -35,9 +37,13 @@ public class EnemyShot : Shot
             float harmBeforeCollision = _harm;
             reduceHarm(shield.shieldEnergy);
             shield.reduceShield(harmBeforeCollision);
-            if (_harm <= 0) disactivateShot();
+            if (_harm <= 0)
+            {
+                contactPointOfCollider = collision.ClosestPoint(transform.position);
+                disactivateShot(true);
+            }
         }
-        _trailRenderer.Clear();
+        //_trailRenderer.Clear();
     }
 
     //// Update is called once per frame

@@ -329,6 +329,8 @@ public class GridManager : MonoBehaviour
         PlayerFleetManager.instance.distributeResources(index1, index1Value, index1Value);
         if (index2Value > 0) PlayerFleetManager.instance.distributeResources(index2, index2Value, index2Value);
 
+        //GameManager.instance.stopTheTimer();
+
         for (int i = 0; i < toDisactivateTiles.Count; i++)
         {
             toDisactivateTiles[i].DisactivateTile();
@@ -340,10 +342,6 @@ public class GridManager : MonoBehaviour
         }
         tilesAreMoving = true;
     }
-
-    
-
-
 
     private void pullNewTile(int column, int row, int multiplier)
     {
@@ -432,7 +430,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    private void CPUAttackProcess()
+    public void CPUAttackProcess()
     { //CPU turn loop
         int iteration=0;
         if (GameManager.instance.hardnessLevel == 0)

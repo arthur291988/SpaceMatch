@@ -32,34 +32,38 @@ public class PlayerFlagship : PlayerShip
         updateShotLine();
     }
 
-    public override void makeShot()
-    {
-        ObjectPulledList = ObjectPuller.current.GetPlayerFlagshipShotPullList();
-        ObjectPulled = ObjectPuller.current.GetGameObjectFromPull(ObjectPulledList);
-        bulletTransform = ObjectPulled.transform;
-        bulletTransform.position = shipPosition;
-        PlayerShot shot = ObjectPulled.GetComponent<PlayerShot>();
-        if (!shot.isActiveAndEnabled) shot.enabled = true;
-        shot._harm = shotPower;
+    //public override void makeShot()
+    //{
+    //    ObjectPulledList = ObjectPuller.current.GetPlayerFlagshipShotPullList();
+    //    ObjectPulled = ObjectPuller.current.GetGameObjectFromPull(ObjectPulledList);
+    //    bulletTransform = ObjectPulled.transform;
+    //    bulletTransform.position = shipPosition;
+    //    PlayerShot shot = ObjectPulled.GetComponent<PlayerShot>();
+    //    if (!shot.isActiveAndEnabled) shot.enabled = true;
+    //    shot._harm = shotPower;
 
 
-        Ship shipToAttack = EnemyFleetManager.instance.enemyFleet.Count == 1 ? EnemyFleetManager.instance.enemyFleet[0] :
-                EnemyFleetManager.instance.enemyFleet[Random.Range(0, EnemyFleetManager.instance.enemyFleet.Count)];
+    //    Ship shipToAttack = EnemyFleetManager.instance.enemyFleet.Count == 1 ? EnemyFleetManager.instance.enemyFleet[0] :
+    //            EnemyFleetManager.instance.enemyFleet[Random.Range(0, EnemyFleetManager.instance.enemyFleet.Count)];
 
 
-        attackDirection = shipToAttack.shipPosition;
+    //    attackDirection = shipToAttack.shipPosition;
 
-        attackDirection -= shipPosition;
-        if (aimingCount == 0) attackDirection = RotateAttackVector(attackDirection, Random.Range(-accuracy, accuracy)); //if ship has aiming its vector is not disordered by accuracy
+    //    attackDirection -= shipPosition;
+    //    if (aimingCount == 0) attackDirection = RotateAttackVector(attackDirection, Random.Range(-accuracy, accuracy)); //if ship has aiming its vector is not disordered by accuracy
 
-        bulletTransform.rotation = Quaternion.FromToRotation(bulletRotateBase, attackDirection);
-        ObjectPulled.SetActive(true);
+    //    bulletTransform.rotation = Quaternion.FromToRotation(bulletRotateBase, attackDirection);
+    //    ObjectPulled.SetActive(true);
 
-        ObjectPulled.GetComponent<Rigidbody2D>().AddForce(attackDirection.normalized * shotImpulse, ForceMode2D.Impulse);
+    //    ObjectPulled.GetComponent<Rigidbody2D>().AddForce(attackDirection.normalized * shotImpulse, ForceMode2D.Impulse);
 
-        base.makeShot();
-    }
-
+    //    base.makeShot();
+    //}
+    //public override void makeBurst()
+    //{
+    //    ObjectPulledList = ObjectPuller.current.GetFlagshipBurstList();
+    //    base.makeBurst();
+    //}
 
 
     //public override void addToFleetManager()
