@@ -12,6 +12,15 @@ public class EnemyShip : Ship
 
     public override void makeShot()
     {
+        actionsAreOn = true;
+        consumeEnergy(shotPower);
+        shotEnergy -= shotPower;
+        StartCoroutine(makeShotCoroutine());
+    }
+
+    private IEnumerator makeShotCoroutine() {
+        yield return new WaitForSeconds(UnityEngine.Random.Range(minShotTime, maxShotTime));
+
         ObjectPulledList = ObjectPuller.current.GetEnemyShotPullList(indexOfShip);
         ObjectPulled = ObjectPuller.current.GetGameObjectFromPull(ObjectPulledList);
         bulletTransform = ObjectPulled.transform;
@@ -30,7 +39,9 @@ public class EnemyShip : Ship
         bulletTransform.rotation = Quaternion.FromToRotation(bulletRotateBase, attackDirection);
         ObjectPulled.SetActive(true);
 
-        ObjectPulled.GetComponent<Rigidbody2D>().AddForce(attackDirection.normalized * shotImpulse, ForceMode2D.Impulse);
+        Rigidbody2D rb = ObjectPulled.GetComponent<Rigidbody2D>();
+        rb.velocity = Vector3.zero;
+        rb.AddForce(attackDirection.normalized * shotImpulse, ForceMode2D.Impulse);
 
         base.makeShot();
     }

@@ -15,14 +15,21 @@ public class GameManager : MonoBehaviour
 
     private float xStep;
 
-    public float hardnessLevel; //0-easey 1-medium 2-hard
 
     private bool fightIsOn;
+    private bool movesFrozen;
     [SerializeField]
     private GameObject coverBoard;
 
     [NonSerialized]
     public List<Shot> shotsOnScene;
+
+    private const float firstRowYValueEnemyFleet = 11;
+    private const float secondRowYValueEnemyFleet = 8.45f;
+    private const float firstRowYValuePlayerFleet = 0;
+    private const float secondRowYValuePlayerFleet = 2.55f;
+    private const float destroyerXGap = 0.5f;
+    //private const float destroyerYGap = 0.35f;
 
     //[NonSerialized]
     //public float turnTimeUp;
@@ -47,12 +54,14 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         shotsOnScene = new List<Shot>();
+        CommonData.Instance.setGameLevelAndHardness(0);
         instantiateEnemyFleet();
         instantiatePlayerFleet();
         PlayerFleetManager.instance.startSettings();
         EnemyFleetManager.instance.startSettings();
-        hardnessLevel = 0;
         fightIsOn = false;
+        movesFrozen = false;
+
         //turnTimeMax = 7;
 
         //turnTimeUp = 7;
@@ -87,67 +96,186 @@ public class GameManager : MonoBehaviour
     //    if (!fightIsOn && !GridManager.Instance.tilesAreMoving) setTheTimer();
     //}
 
-    private void instantiateEnemyFleet() {
-        float xStepLocal=0;
-        for (int i =0;i<5;i++) {
 
-            ObjectPulledList = ObjectPuller.current.GetEnemyShipPullList(2);
-            ObjectPulled = ObjectPuller.current.GetGameObjectFromPull(ObjectPulledList);
 
-            if (i == 0) ObjectPulled.transform.position = new Vector2(0, 11);
-            else if (i % 2 == 0)
+    //iterate through types of ships on first cycle and their counts on second level of cycle
+    //forst level of cycle iterates downwards because stronger ships put on scene first 
+    private void instantiateEnemyFleet()
+    {
+        int totalShipsCount = 0;
+        float xStepLocal = 0;
+        float yStepLocal = firstRowYValueEnemyFleet;
+        GameObject shipObject;
+        GameObject shipObject2;
+        for (int i = CommonData.Instance.getEnemyFleetByLevel(CommonData.Instance.getGameLevel()).Count - 1; i >= 0; i--)
+        {
+            for (int j = 0; j < CommonData.Instance.getEnemyFleetByLevel(CommonData.Instance.getGameLevel())[i]; j++)
             {
-                ObjectPulled.transform.position = new Vector2(-xStepLocal, 11);
-            }
-            else {
-                xStepLocal += xStep;
-                ObjectPulled.transform.position = new Vector2(xStepLocal, 11);
-            }
-            ObjectPulled.transform.rotation = Quaternion.Euler(0, 0, 180);
-            Ship ship = ObjectPulled.GetComponent<Ship>();
-            ship.StartSettings();
-            ObjectPulled.SetActive(true);
-            ship.activatePowerShiledOnStart();
-        }
+                shipObject = pullEnemyShip(i);
 
+                if (totalShipsCount == 0) shipObject.transform.position = new Vector2(xStepLocal, yStepLocal);
+                //switch to second row of fleet
+                else if (totalShipsCount == 5)
+                {
+                    yStepLocal = secondRowYValueEnemyFleet;
+                    xStepLocal = 0;
+                    shipObject.transform.position = new Vector2(xStepLocal, yStepLocal);
+                }
+                if (yStepLocal != secondRowYValueEnemyFleet)
+                {
+                    if (totalShipsCount % 2 == 0)
+                    {
+                        shipObject.transform.position = new Vector2(-xStepLocal, yStepLocal);
+                    }
+                    else
+                    {
+                        xStepLocal += xStep;
+                        shipObject.transform.position = new Vector2(xStepLocal, yStepLocal);
+                    }
+                }
+                else
+                {
+                    if (totalShipsCount % 2 == 0)
+                    {
+                        xStepLocal += xStep;
+                        shipObject.transform.position = new Vector2(xStepLocal, yStepLocal);
+                    }
+                    else
+                    {
+                        shipObject.transform.position = new Vector2(-xStepLocal, yStepLocal);
+                    }
+                }
+                Ship ship = shipObject.GetComponent<Ship>();
+                ship.StartSettings();
+                shipObject.SetActive(true);
+                ship.activatePowerShiledOnStart();
+
+                //if ship is detroyer there necessery to put extra one in one placement
+                if (i == 0)
+                {
+                    shipObject2 = pullEnemyShip(i);
+                    float basePointX = shipObject.transform.position.x;
+                    shipObject.transform.position = new Vector2(basePointX + destroyerXGap, yStepLocal);
+                    shipObject2.transform.position = new Vector2(basePointX - destroyerXGap, yStepLocal);
+
+                    Ship ship2 = shipObject2.GetComponent<Ship>();
+                    ship2.StartSettings();
+                    shipObject2.SetActive(true);
+                    ship2.activatePowerShiledOnStart();
+                }
+
+
+                
+
+                totalShipsCount++;
+            }
+        }
     }
     private void instantiatePlayerFleet()
     {
+        int totalShipsCount = 0;
         float xStepLocal = 0;
-        for (int i = 0; i < 5; i++)
+        float yStepLocal = firstRowYValuePlayerFleet;
+        GameObject shipObject;
+        GameObject shipObject2;
+        for (int i = CommonData.Instance.getPlayerFleetByLevel(CommonData.Instance.getGameLevel()).Count - 1; i >= 0; i--)
         {
-
-            ObjectPulledList = ObjectPuller.current.GetPlayerShipPullList(2);
-            ObjectPulled = ObjectPuller.current.GetGameObjectFromPull(ObjectPulledList);
-
-            if (i == 0) ObjectPulled.transform.position = Vector2.zero;
-            else if (i % 2 == 0)
+            for (int j = 0; j < CommonData.Instance.getPlayerFleetByLevel(CommonData.Instance.getGameLevel())[i]; j++)
             {
-                ObjectPulled.transform.position = new Vector2(-xStepLocal, 0);
+
+                shipObject = pullPlayerShip(i);
+
+                if (totalShipsCount == 0) shipObject.transform.position = new Vector2(xStepLocal, yStepLocal);
+                //switch to second row of fleet
+                else if (totalShipsCount ==5)
+                {
+                    yStepLocal = secondRowYValuePlayerFleet;
+                    xStepLocal = 0;
+                    shipObject.transform.position = new Vector2(xStepLocal, yStepLocal);
+                }
+                if (yStepLocal != secondRowYValuePlayerFleet)
+                {
+                    if (totalShipsCount % 2 == 0)
+                    {
+                        shipObject.transform.position = new Vector2(-xStepLocal, yStepLocal);
+                    }
+                    else
+                    {
+                        xStepLocal += xStep;
+                        shipObject.transform.position = new Vector2(xStepLocal, yStepLocal);
+                    }
+                }
+                else {
+                    if (totalShipsCount % 2 == 0)
+                    {
+                        xStepLocal += xStep;
+                        shipObject.transform.position = new Vector2(xStepLocal, yStepLocal);
+                    }
+                    else
+                    {
+                        shipObject.transform.position = new Vector2(-xStepLocal, yStepLocal);
+                    }
+                }
+
+                Ship ship = shipObject.GetComponent<Ship>();
+                ship.StartSettings();
+                shipObject.SetActive(true);
+                ship.activatePowerShiledOnStart();
+
+                //if ship is detroyer there necessery to put extra one in one placement
+                if (i == 0)
+                {
+                    shipObject2 = pullPlayerShip(i);
+                    float basePointX = shipObject.transform.position.x;
+                    shipObject.transform.position = new Vector2(basePointX + destroyerXGap, yStepLocal);
+                    shipObject2.transform.position = new Vector2(basePointX - destroyerXGap, yStepLocal);
+
+                    Ship ship2 = shipObject2.GetComponent<Ship>();
+                    ship2.StartSettings();
+                    shipObject2.SetActive(true);
+                    ship2.activatePowerShiledOnStart();
+                }
+
+                totalShipsCount++;
             }
-            else
-            {
-                xStepLocal += xStep;
-                ObjectPulled.transform.position = new Vector2(xStepLocal, 0);
-            }
-            Ship ship = ObjectPulled.GetComponent<Ship>();
-            ship.StartSettings();
-            ObjectPulled.SetActive(true);
-            ship.activatePowerShiledOnStart();
         }
+    }
 
+    private GameObject pullEnemyShip(int index) {
+        ObjectPulledList = ObjectPuller.current.GetEnemyShipPullList(index);
+        ObjectPulled = ObjectPuller.current.GetGameObjectFromPull(ObjectPulledList);
+        ObjectPulled.transform.rotation = Quaternion.Euler(0, 0, 180);
+        return ObjectPulled;
+    }
+    private GameObject pullPlayerShip(int index)
+    {
+        ObjectPulledList = ObjectPuller.current.GetPlayerShipPullList(index);
+        ObjectPulled = ObjectPuller.current.GetGameObjectFromPull(ObjectPulledList);
+        
+        return ObjectPulled;
     }
 
     public bool getFightIsOn() {
         return fightIsOn;
     }
+    public bool getMovesFrozen()
+    {
+        return movesFrozen;
+    }
 
     public void setFightOn(bool state)
     {
         fightIsOn = state;
-        coverBoard.SetActive(state);
+        if (!state) {
+            //chek if game finished
+            if (EnemyFleetManager.instance.enemyFleet.Count!=0 && PlayerFleetManager.instance.playerFleet.Count != 0) coverBoard.SetActive(state);
+            else if (!coverBoard.activeInHierarchy) coverBoard.SetActive(true);
+        }
+        else coverBoard.SetActive(state);
         //if (!fightIsOn) setTheTimer();
     }
+
+
 
     public void addShot(Shot shot)
     {

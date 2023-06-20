@@ -61,7 +61,23 @@ public class ObjectPuller : MonoBehaviour
     [SerializeField]
     private GameObject bulletBurst;
     [SerializeField]
-    private GameObject shieldBurst;
+    private GameObject shieldFlaghipBurst;
+    [SerializeField]
+    private GameObject shieldDestrBurst;
+    [SerializeField]
+    private GameObject shieldCruisBurst;
+
+
+    [SerializeField]
+    private GameObject HPGather;
+    [SerializeField]
+    private GameObject ShotGather;
+    [SerializeField]
+    private GameObject EnergyGather;
+    [SerializeField]
+    private GameObject ShieldGather;
+    [SerializeField]
+    private GameObject AimGather;
 
     private List<GameObject> TilesList;
 
@@ -88,7 +104,16 @@ public class ObjectPuller : MonoBehaviour
     private List<GameObject> cruisBurstList;
     private List<GameObject> destrBurstList;
     private List<GameObject> bulletBurstList;
-    private List<GameObject> shieldBurstList;
+    private List<GameObject> shieldFlaghipBurstList;
+    private List<GameObject> shieldDestrBurstList;
+    private List<GameObject> shieldCruisBurstList;
+
+
+    private List<GameObject> HPGatherList;
+    private List<GameObject> ShotGatherList;
+    private List<GameObject> EnergyGatherList;
+    private List<GameObject> ShieldGatherList;
+    private List<GameObject> AimGatherList;
 
 
     private void Awake()
@@ -126,7 +151,16 @@ public class ObjectPuller : MonoBehaviour
         cruisBurstList = new List<GameObject>();
         destrBurstList = new List<GameObject>();
         bulletBurstList = new List<GameObject>();
-        shieldBurstList = new List<GameObject>();
+        shieldFlaghipBurstList = new List<GameObject>();
+        shieldDestrBurstList = new List<GameObject>();
+        shieldCruisBurstList = new List<GameObject>();
+
+
+        HPGatherList = new List<GameObject>();
+        ShotGatherList = new List<GameObject>();
+        EnergyGatherList = new List<GameObject>();
+        ShieldGatherList = new List<GameObject>();
+        AimGatherList = new List<GameObject>();
 
 
         for (int i = 0; i < pullOfObjects100; i++)
@@ -163,6 +197,8 @@ public class ObjectPuller : MonoBehaviour
             GameObject obj6 = Instantiate(enemyDestr);
             obj6.SetActive(false);
             enemyDestrList.Add(obj6);
+
+            
         }
 
         for (int i = 0; i < pullOfObjects15; i++)
@@ -211,7 +247,28 @@ public class ObjectPuller : MonoBehaviour
 
             GameObject obj6 = Instantiate(enemyDestrShot);
             obj6.SetActive(false);
-            enemyDestrShotList.Add(obj6);
+            enemyDestrShotList.Add(obj6); 
+            
+            GameObject obj10 = Instantiate(HPGather);
+            obj10.SetActive(false);
+            HPGatherList.Add(obj10);
+
+            GameObject obj11 = Instantiate(ShotGather);
+            obj11.SetActive(false);
+            ShotGatherList.Add(obj11);
+
+            GameObject obj12 = Instantiate(EnergyGather);
+            obj12.SetActive(false);
+            EnergyGatherList.Add(obj12);
+
+
+            GameObject obj13 = Instantiate(ShieldGather);
+            obj13.SetActive(false);
+            ShieldGatherList.Add(obj13);
+
+            GameObject obj14 = Instantiate(AimGather);
+            obj14.SetActive(false);
+            AimGatherList.Add(obj14);
 
         }
         for (int i = 0; i < pullOfObjects3; i++)
@@ -229,9 +286,17 @@ public class ObjectPuller : MonoBehaviour
             destrBurstList.Add(obj);
 
 
-            GameObject obj3 = Instantiate(shieldBurst);
+            GameObject obj3 = Instantiate(shieldFlaghipBurst);
             obj3.SetActive(false);
-            shieldBurstList.Add(obj3);
+            shieldFlaghipBurstList.Add(obj3);
+
+            GameObject obj4 = Instantiate(shieldCruisBurst);
+            obj4.SetActive(false);
+            shieldCruisBurstList.Add(obj4);
+
+            GameObject obj5 = Instantiate(shieldDestrBurst);
+            obj5.SetActive(false);
+            shieldDestrBurstList.Add(obj5);
         }
 
 
@@ -290,9 +355,11 @@ public class ObjectPuller : MonoBehaviour
     {
         return bulletBurstList;
     }
-    public List<GameObject> GetShieldBurstList()
+    public List<GameObject> GetShieldBurstList(int indexOfShip)
     {
-        return shieldBurstList;
+        if (indexOfShip == 0) return shieldDestrBurstList;
+        else if (indexOfShip == 1) return shieldCruisBurstList;
+        else return shieldFlaghipBurstList;
     }
 
 
@@ -303,7 +370,14 @@ public class ObjectPuller : MonoBehaviour
         else if (index == 2) return ShieldBurstList;
         else return HPBurstList;
     }
-
+    public List<GameObject> GetGatherList(int index)
+    {
+        if (index == 0) return ShotGatherList;
+        else if (index == 1) return EnergyGatherList;
+        else if (index == 2) return ShieldGatherList;
+        else if (index == 3) return HPGatherList;
+        else return AimGatherList;
+    }
 
 
     //universal method to set active proper game object from the list of GOs, it just needs to get correct List of game objects

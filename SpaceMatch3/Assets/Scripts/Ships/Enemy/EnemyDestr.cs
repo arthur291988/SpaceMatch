@@ -17,8 +17,8 @@ public class EnemyDestr : EnemyShip
         HP = HPMax;
         energyMax = 5; //7
         energy = energyMax;
-        minShotTime = 0.4f; //0.5
-        maxShotTime = 1.4f; //1.5
+        minShotTime = 0.2f; //0.5
+        maxShotTime = 0.7f; //1.5
         shotEnergyMax = 2;
 
         updateLifeLine();

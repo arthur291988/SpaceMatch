@@ -22,8 +22,8 @@ public class PlayerCruiser : PlayerShip
         HP = HPMax;
         energyMax = 7; //7
         energy = energyMax;
-        minShotTime = 0.55f; //0.5
-        maxShotTime = 1.7f; //1.5
+        minShotTime = 0.3f; //0.5
+        maxShotTime = 0.85f; //1.5
         shotEnergyMax = 3;
 
         updateLifeLine();

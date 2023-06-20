@@ -18,7 +18,8 @@ public class PlayerFleetManager : MonoBehaviour
     [NonSerialized]
     public Ship nextShipToShield;
 
-    
+    private GameObject ObjectPulled;
+    private List<GameObject> ObjectPulledList;
 
     public static PlayerFleetManager instance;
 
@@ -128,7 +129,7 @@ public class PlayerFleetManager : MonoBehaviour
     {
         if (playerFleet.Count > 1)
         {
-            int x = playerFleet.IndexOf(nextShipToShot) + 1;
+            int x = playerFleet.IndexOf(nextShipToShield) + 1;
             if (x < playerFleet.Count) nextShipToShield = playerFleet[x];
             else nextShipToShield = playerFleet[0];
         }
@@ -155,6 +156,7 @@ public class PlayerFleetManager : MonoBehaviour
         {
             for (int i = 0; i < value; i++)
             {
+                makeGather(index, nextShipToShot.shipPosition);
                 nextShipToShot.increaseShotPower();
                 assignNextShipToShot();
             }
@@ -164,6 +166,7 @@ public class PlayerFleetManager : MonoBehaviour
         {
             for (int i = 0; i < value; i++)
             {
+                makeGather(index, nextShipToEnergy.shipPosition);
                 nextShipToEnergy.increaseEnergy(1);
                 assignNextShipToEnergy();
             }
@@ -173,6 +176,7 @@ public class PlayerFleetManager : MonoBehaviour
         {
             for (int i = 0; i < value; i++)
             {
+                makeGather(index, nextShipToShield.shipPosition);
                 if (nextShipToShield.shield.activeInHierarchy) nextShipToShield.healShield(ShieldAddValue);
                 else nextShipToShield.cumulateShiled(ShieldAddValue);
 
@@ -184,6 +188,7 @@ public class PlayerFleetManager : MonoBehaviour
         {
             for (int i = 0; i < value; i++)
             {
+                makeGather(index, nextShipToHP.shipPosition);
                 nextShipToHP.healHP(HPAddValue);
                 assignNextShipToHP();
             }
@@ -194,11 +199,22 @@ public class PlayerFleetManager : MonoBehaviour
             if (playerFleet.Count > 0) {
                 for (int i = 0; i < value; i++)
                 {
-                    playerFleet[UnityEngine.Random.Range(0, playerFleet.Count)].increaseAimingCount();
+                    Ship ship = playerFleet[UnityEngine.Random.Range(0, playerFleet.Count)];
+                    makeGather(index, ship.shipPosition);
+                    ship.increaseAimingCount();
                 }
             }
         }
         if (comboValue > 3) processCombo(index, comboValue);
+    }
+
+    //0-shot; 1-energy, 2-Shield, 3-HP 4-Aim
+    private void makeGather(int index, Vector2 position)
+    {
+        ObjectPulledList = ObjectPuller.current.GetGatherList(index);
+        ObjectPulled = ObjectPuller.current.GetGameObjectFromPull(ObjectPulledList);
+        ObjectPulled.transform.position = position;
+        ObjectPulled.SetActive(true);
     }
 
     public void processCombo(int index, int comboValue) {

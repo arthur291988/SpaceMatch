@@ -13,6 +13,9 @@ public class Shield : MonoBehaviour
     private Transform _transform;
     private Vector2 _position;
 
+    [NonSerialized]
+    public int shipIndex;
+
     public SpriteRenderer _spriteRendererOfShieldLine;
     [NonSerialized]
     public MaterialPropertyBlock matBlockOfShieldLineSprite;
@@ -60,7 +63,7 @@ public class Shield : MonoBehaviour
 
     public void makeBurst()
     {
-        ObjectPulledList = ObjectPuller.current.GetShieldBurstList();
+        ObjectPulledList = ObjectPuller.current.GetShieldBurstList(shipIndex);
         ObjectPulled = ObjectPuller.current.GetGameObjectFromPull(ObjectPulledList);
         ObjectPulled.transform.position = _position;
         ObjectPulled.SetActive(true);

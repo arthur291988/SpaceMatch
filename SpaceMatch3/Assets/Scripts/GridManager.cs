@@ -295,16 +295,20 @@ public class GridManager : MonoBehaviour
                         pullNewTile(column, GridHeight - 1, x);
                         if (current.isMatched && !toDisactivateTiles.Contains(current)) toDisactivateTiles.Add(current);
                     }
-
                     x++;
                 }
             }
         }
 
-        int index1 = 0;
-        int index2 = 0;
+        int index1 = -1;
+        int index2 = -1;
+        int index3 = -1;
+        int index4 = -1;
         int index1Value = 0;
         int index2Value = 0;
+        int index3Value = 0;
+        int index4Value = 0;
+
         //split the resources that matched simultaniously if there is a case, if no only one resource is taken into account
         for (int i = 0; i < toDisactivateTiles.Count; i++)
         {
@@ -317,17 +321,49 @@ public class GridManager : MonoBehaviour
             {
                 index1Value++;
             }
-            else if (index1 != toDisactivateTiles[i].indexOfResource)
-            {
-                index2 = toDisactivateTiles[i].indexOfResource;
-                index2Value++;
+            else {
+                if (index2 == -1)
+                {
+                    index2 = toDisactivateTiles[i].indexOfResource;
+                    index2Value++;
+                }
+                else if (index2 == toDisactivateTiles[i].indexOfResource)
+                {
+                    index2Value++;
+                }
+                else {
+                    if (index3 == -1)
+                    {
+                        index3 = toDisactivateTiles[i].indexOfResource;
+                        index3Value++;
+                    }
+                    else if (index3 == toDisactivateTiles[i].indexOfResource)
+                    {
+                        index3Value++;
+                    }
+                    else
+                    {
+                        if (index4 == -1)
+                        {
+                            index4 = toDisactivateTiles[i].indexOfResource;
+                            index4Value++;
+                        }
+                        else if (index4 == toDisactivateTiles[i].indexOfResource)
+                        {
+                            index4Value++;
+                        }
+                    }
+                }
             }
+            
             toDisactivateTiles[i].DisactivateTile();
         }
 
         //adding according resources if there is more than one resource matched, if only one then added only so
         PlayerFleetManager.instance.distributeResources(index1, index1Value, index1Value);
         if (index2Value > 0) PlayerFleetManager.instance.distributeResources(index2, index2Value, index2Value);
+        if (index3Value > 0) PlayerFleetManager.instance.distributeResources(index3, index3Value, index3Value);
+        if (index4Value > 0) PlayerFleetManager.instance.distributeResources(index4, index4Value, index4Value);
 
         //GameManager.instance.stopTheTimer();
 
@@ -342,6 +378,7 @@ public class GridManager : MonoBehaviour
         }
         tilesAreMoving = true;
     }
+
 
     private void pullNewTile(int column, int row, int multiplier)
     {
@@ -433,15 +470,15 @@ public class GridManager : MonoBehaviour
     public void CPUAttackProcess()
     { //CPU turn loop
         int iteration=0;
-        if (GameManager.instance.hardnessLevel == 0)
+        if (CommonData.Instance.getGameHardness() == 0)
         {
             iteration = UnityEngine.Random.Range(0, 4) < 3 ? UnityEngine.Random.Range(1, 3) : UnityEngine.Random.Range(2, 7);
         }
-        else if (GameManager.instance.hardnessLevel == 1)
+        else if (CommonData.Instance.getGameHardness() == 1)
         {
             iteration = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(1, 4) : UnityEngine.Random.Range(3, 7);
         }
-        else if (GameManager.instance.hardnessLevel == 2)
+        else if (CommonData.Instance.getGameHardness() == 2)
         {
             iteration = UnityEngine.Random.Range(0, 2) < 1 ? UnityEngine.Random.Range(1, 4) : UnityEngine.Random.Range(4, 7);
         }
@@ -450,15 +487,15 @@ public class GridManager : MonoBehaviour
         {
             int index = UnityEngine.Random.Range(0, 4);
             int value = 3;
-            if (GameManager.instance.hardnessLevel == 0)
+            if (CommonData.Instance.getGameHardness() == 0)
             {
                 value = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(3, 5) : UnityEngine.Random.Range(4, 8);
             }
-            else if (GameManager.instance.hardnessLevel == 1)
+            else if (CommonData.Instance.getGameHardness() == 1)
             {
                 value = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(3, 6) : UnityEngine.Random.Range(4, 8);
             }
-            else if (GameManager.instance.hardnessLevel == 2)
+            else if (CommonData.Instance.getGameHardness() == 2)
             {
                 value = UnityEngine.Random.Range(0, 2) < 1 ? UnityEngine.Random.Range(3, 7) : UnityEngine.Random.Range(4, 8);
             }

@@ -16,15 +16,15 @@ public class EnemyFlagship : EnemyShip
         base.StartSettings();
 
         accuracy = 0.13f; //0.2f
-        shotImpulse = 17; //15
+        shotImpulse = 13; //15
         shotPower = 0.9f; //0.7
         shieldEnergyMax = 5; //3
-        HPMax = 7; //5
+        HPMax = 7.5f; //5
         HP = HPMax;
         energyMax = 9; //7
         energy = energyMax;
-        minShotTime = 0.7f; //0.5
-        maxShotTime = 2f; //1.5
+        minShotTime = 0.35f; //0.5
+        maxShotTime = 1f; //1.5
         shotEnergyMax = 5;
 
         updateLifeLine();

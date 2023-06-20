@@ -187,9 +187,7 @@ public class Ship : MonoBehaviour
     public virtual void makeShot()
     {
         shotEffect.Play();
-        actionsAreOn = true;
-        consumeEnergy(shotPower);
-        shotEnergy -= shotPower;
+        
         if (canShot())
         {
             shotingCoroutineIsOn = true;
@@ -200,7 +198,6 @@ public class Ship : MonoBehaviour
         updateShotLine();
         if (!shotingCoroutineIsOn) {
             actionsAreOn = false;
-            //GameManager.instance.checkAllShipsIfActionIsFinished();
         }
     }
     public IEnumerator makeExtraShot()
@@ -208,6 +205,7 @@ public class Ship : MonoBehaviour
         yield return new WaitForSeconds(UnityEngine.Random.Range(minShotTime, maxShotTime));
         shotingCoroutineIsOn = false;
         if (canShot()) makeShot();
+        else actionsAreOn = false;
     }
 
     public void checkActions() {
@@ -228,6 +226,7 @@ public class Ship : MonoBehaviour
         shieldClass.shieldEnergy = shieldEnergyMax;
         shieldClass.shieldEnergyMax = shieldEnergyMax;
         shieldCumulation = 0;
+        shieldClass.shipIndex = indexOfShip;
         consumeEnergy(shieldEnergyMax);
         shield.SetActive(true);
         shieldClass.updateShieldLine();
