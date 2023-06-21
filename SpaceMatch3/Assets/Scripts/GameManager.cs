@@ -315,6 +315,8 @@ public class GameManager : MonoBehaviour
         return isFinished;
     }
 
+    
+
     // Update is called once per frame
     //void Update()
     //{

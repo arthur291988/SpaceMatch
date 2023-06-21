@@ -15,8 +15,6 @@ public class PlayerShip : Ship
     public override void makeShot()
     {
         actionsAreOn = true;
-        consumeEnergy(shotPower);
-        shotEnergy -= shotPower;
         StartCoroutine(makeShotCoroutine());
     }
 
@@ -26,6 +24,8 @@ public class PlayerShip : Ship
     {
         yield return new WaitForSeconds(UnityEngine.Random.Range(minShotTime, maxShotTime));
 
+        consumeEnergy(shotPower);
+        shotEnergy -= shotPower;
         ObjectPulledList = ObjectPuller.current.GetPlayerShotPullList(indexOfShip);
         ObjectPulled = ObjectPuller.current.GetGameObjectFromPull(ObjectPulledList);
         bulletTransform = ObjectPulled.transform;
@@ -34,12 +34,13 @@ public class PlayerShip : Ship
         if (!shot.isActiveAndEnabled) shot.enabled = true;
         shot._harm = shotPower;
 
-
-        Ship shipToAttack = EnemyFleetManager.instance.enemyFleet.Count == 1 ? EnemyFleetManager.instance.enemyFleet[0] :
-                EnemyFleetManager.instance.enemyFleet[Random.Range(0, EnemyFleetManager.instance.enemyFleet.Count)];
-
-
-        attackDirection = shipToAttack.shipPosition;
+        if (EnemyFleetManager.instance.enemyFleet.Count > 0)
+        {
+            Ship shipToAttack = EnemyFleetManager.instance.enemyFleet.Count == 1 ? EnemyFleetManager.instance.enemyFleet[0] :
+                    EnemyFleetManager.instance.enemyFleet[Random.Range(0, EnemyFleetManager.instance.enemyFleet.Count)];
+            attackDirection = shipToAttack.shipPosition;
+        }
+        else attackDirection = Vector2.up;
 
         attackDirection -= shipPosition;
         if (aimingCount == 0) attackDirection = RotateAttackVector(attackDirection, Random.Range(-accuracy, accuracy)); //if ship has aiming its vector is not disordered by accuracy

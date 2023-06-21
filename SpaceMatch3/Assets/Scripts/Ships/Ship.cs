@@ -170,6 +170,7 @@ public class Ship : MonoBehaviour
     {
         removeFromFleetManager();
         makeBurst();
+        CameraManager.Instance.shakeCamera();
         _gameObject.SetActive(false);
     }
 
@@ -187,7 +188,7 @@ public class Ship : MonoBehaviour
     public virtual void makeShot()
     {
         shotEffect.Play();
-        
+        AudioManager.Instance.shotSoundPlay(indexOfShip);
         if (canShot())
         {
             shotingCoroutineIsOn = true;
