@@ -171,6 +171,7 @@ public class Ship : MonoBehaviour
         removeFromFleetManager();
         makeBurst();
         CameraManager.Instance.shakeCamera();
+        AudioManager.Instance.explosionPlay();
         _gameObject.SetActive(false);
     }
 

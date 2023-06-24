@@ -81,7 +81,7 @@ public class Shot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_shotTransform.position.y > CommonData.Instance.vertScreenSize / 2 + 1 || _shotTransform.position.y < CommonData.Instance.vertScreenSize / -2 - 1 
+        if (_shotTransform.position.y > CommonData.Instance.vertScreenSize / 2 + 1 || _shotTransform.position.y < -2 
             || _shotTransform.position.x < CommonData.Instance.horisScreenSize / -2 - 1 || _shotTransform.position.x > CommonData.Instance.horisScreenSize / 2 + 1)
         {
             disactivateShot(false);

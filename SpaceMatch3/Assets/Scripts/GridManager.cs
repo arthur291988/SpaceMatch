@@ -364,7 +364,6 @@ public class GridManager : MonoBehaviour
         if (index2Value > 0) PlayerFleetManager.instance.distributeResources(index2, index2Value, index2Value);
         if (index3Value > 0) PlayerFleetManager.instance.distributeResources(index3, index3Value, index3Value);
         if (index4Value > 0) PlayerFleetManager.instance.distributeResources(index4, index4Value, index4Value);
-
         //GameManager.instance.stopTheTimer();
 
         for (int i = 0; i < toDisactivateTiles.Count; i++)

@@ -206,6 +206,8 @@ public class PlayerFleetManager : MonoBehaviour
             }
         }
         if (comboValue > 3) processCombo(index, comboValue);
+
+        AudioManager.Instance.tilePlay(value);
     }
 
     //0-shot; 1-energy, 2-Shield, 3-HP 4-Aim

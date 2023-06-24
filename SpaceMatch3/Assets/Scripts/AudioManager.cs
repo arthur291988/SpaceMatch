@@ -12,6 +12,12 @@ public class AudioManager : MonoBehaviour
     private AudioSource cruisShot;
     [SerializeField]
     private AudioSource destrShot;
+    [SerializeField]
+    private AudioSource Explosion;
+    [SerializeField]
+    private AudioSource tileSound0;
+    [SerializeField]
+    private AudioSource tileSound1;
 
     private void Awake()
     {
@@ -22,6 +28,15 @@ public class AudioManager : MonoBehaviour
         if (index == 0) destrShot.Play();
         else if (index == 1) cruisShot.Play();
         else flagShot.Play();
+    }
+    public void explosionPlay()
+    {
+        Explosion.Play();
+    }
+    public void tilePlay(int value)
+    {
+        if (value < 5) tileSound0.Play();
+        else tileSound1.Play();
     }
 
 }
