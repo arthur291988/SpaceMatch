@@ -175,8 +175,9 @@ public class Ship : MonoBehaviour
         _gameObject.SetActive(false);
     }
 
-    public virtual void makeBurst()
+    public void makeBurst()
     {
+        ObjectPulledList = ObjectPuller.current.GetShipBurstList(indexOfShip);
         ObjectPulled = ObjectPuller.current.GetGameObjectFromPull(ObjectPulledList);
         ObjectPulled.transform.position = _transform.position;
         ObjectPulled.SetActive(true);

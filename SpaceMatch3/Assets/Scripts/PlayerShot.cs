@@ -43,6 +43,17 @@ public class PlayerShot : Shot
                 disactivateShot(true);
             }
         }
+        if (collision.gameObject.TryGetComponent<Asteroid>(out Asteroid asteroid))
+        {
+            float harmBeforeCollision = _harm;
+            reduceHarm(asteroid.getHP());
+            asteroid.reduceHP(harmBeforeCollision);
+            if (_harm <= 0)
+            {
+                contactPointOfCollider = collision.ClosestPoint(transform.position);
+                disactivateShot(true);
+            }
+        }
 
         //_trailRenderer.Clear();
     }

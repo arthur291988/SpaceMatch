@@ -22,7 +22,7 @@ public class CommonData : MonoBehaviour
 
     private List<int> heardnessListByLevel;
 
-    private int gameLevel;
+    private int gameLevel; //0-6
 
     private int levelHardness; //0-easey 1-medium 2-hard
 
@@ -39,7 +39,7 @@ public class CommonData : MonoBehaviour
             [0] = new List<int> { 3, 3, 3 },
             [1] = new List<int> { 5, 5, 5 },
             [2] = new List<int> { 5, 5, 5 },
-            [3] = new List<int> { 5, 5, 5 },
+            [3] = new List<int> { 4, 3,3 },
             [4] = new List<int> { 5, 5, 5 },
             [5] = new List<int> { 5, 5, 5 },
             [6] = new List<int> { 5, 5, 5 }
@@ -49,7 +49,7 @@ public class CommonData : MonoBehaviour
             [0] = new List<int> { 3, 3, 3, 0 },
             [1] = new List<int> { 5, 5, 5, 0 },
             [2] = new List<int> { 5, 5, 5, 0 },
-            [3] = new List<int> { 5, 5, 5, 0 },
+            [3] = new List<int> { 4, 3, 3, 0 },
             [4] = new List<int> { 5, 5, 5, 0 },
             [5] = new List<int> { 5, 5, 5, 0 },
             [6] = new List<int> { 5, 5, 5, 1 }

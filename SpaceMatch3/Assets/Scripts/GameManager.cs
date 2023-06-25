@@ -50,17 +50,21 @@ public class GameManager : MonoBehaviour
         xStep = 2.2f;
     }
 
+
     // Start is called before the first frame update
     void Start()
     {
         shotsOnScene = new List<Shot>();
-        CommonData.Instance.setGameLevelAndHardness(0);
+        CommonData.Instance.setGameLevelAndHardness(3);
         instantiateEnemyFleet();
         instantiatePlayerFleet();
         PlayerFleetManager.instance.startSettings();
         EnemyFleetManager.instance.startSettings();
         fightIsOn = false;
         movesFrozen = false;
+
+        BackgroundManager.Instance.setBackground();
+        BackgroundManager.Instance.pullAsteroidsOnStart();
 
         //turnTimeMax = 7;
 

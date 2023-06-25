@@ -79,6 +79,10 @@ public class ObjectPuller : MonoBehaviour
     [SerializeField]
     private GameObject AimGather;
 
+    [SerializeField]
+    private GameObject Asteroid;
+    
+
     private List<GameObject> TilesList;
 
     private List<GameObject> playerFlagshipShotList;
@@ -114,6 +118,8 @@ public class ObjectPuller : MonoBehaviour
     private List<GameObject> EnergyGatherList;
     private List<GameObject> ShieldGatherList;
     private List<GameObject> AimGatherList;
+
+    private List<GameObject> AsteroidsList;
 
 
     private void Awake()
@@ -161,6 +167,8 @@ public class ObjectPuller : MonoBehaviour
         EnergyGatherList = new List<GameObject>();
         ShieldGatherList = new List<GameObject>();
         AimGatherList = new List<GameObject>();
+
+        AsteroidsList = new List<GameObject>();
 
 
         for (int i = 0; i < pullOfObjects100; i++)
@@ -270,6 +278,11 @@ public class ObjectPuller : MonoBehaviour
             obj14.SetActive(false);
             AimGatherList.Add(obj14);
 
+            GameObject obj15 = Instantiate(Asteroid);
+            obj15.SetActive(false);
+            AsteroidsList.Add(obj15);
+            
+
         }
         for (int i = 0; i < pullOfObjects3; i++)
         {
@@ -378,6 +391,13 @@ public class ObjectPuller : MonoBehaviour
         else if (index == 3) return HPGatherList;
         else return AimGatherList;
     }
+
+    public List<GameObject> GetAsteroidsList()
+    {
+        return AsteroidsList;
+    }
+
+    
 
 
     //universal method to set active proper game object from the list of GOs, it just needs to get correct List of game objects

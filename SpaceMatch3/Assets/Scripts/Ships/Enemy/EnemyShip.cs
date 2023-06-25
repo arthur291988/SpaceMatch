@@ -50,11 +50,11 @@ public class EnemyShip : Ship
         base.makeShot();
     }
 
-    public override void makeBurst()
-    {
-        ObjectPulledList = ObjectPuller.current.GetShipBurstList(indexOfShip);
-        base.makeBurst();
-    }
+    //public override void makeBurst()
+    //{
+    //    ObjectPulledList = ObjectPuller.current.GetShipBurstList(indexOfShip);
+    //    base.makeBurst();
+    //}
 
     public override void addToFleetManager()
     {
