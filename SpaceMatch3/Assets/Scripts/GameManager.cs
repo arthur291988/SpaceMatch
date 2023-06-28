@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         shotsOnScene = new List<Shot>();
-        CommonData.Instance.setGameLevelAndHardness(3);
+        CommonData.Instance.setGameLevelAndHardness(GameParams.currentLevel);
         instantiateEnemyFleet();
         instantiatePlayerFleet();
         PlayerFleetManager.instance.startSettings();

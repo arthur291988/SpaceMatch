@@ -26,9 +26,8 @@ public class Asteroid : MonoBehaviour
     private SpriteAtlas atlas;
 
     private float HP;
-    private const float MaxHPSmall = 2;
-    private const float MaxHPMed =3.5f;
-    private const float MaxHPBig = 5.5f;
+    private const float MaxHPSmall = 1f;
+    private const float MaxHPMed =2f;
 
 
     private void OnEnable()
@@ -40,11 +39,11 @@ public class Asteroid : MonoBehaviour
         speed = UnityEngine.Random.Range(0.3f, 0.7f);
         rotationSpeed = UnityEngine.Random.Range(0, 2) > 0 ? UnityEngine.Random.Range(10, 40) : UnityEngine.Random.Range(-10, -40);
         rotation = new Vector3(0, 0, rotationSpeed);
-        scale = UnityEngine.Random.Range(0.1f,0.3f);
+        scale = UnityEngine.Random.Range(0.1f,0.15f);
         moveDir =  Vector2.right;
         _transform.localScale = new Vector2(scale, scale);
-        burstScale = scale > 0.15f ? 0 : 1;
-        HP = scale > 0.23f ? MaxHPBig : scale > 0.15f ? MaxHPMed : MaxHPSmall;
+        burstScale = 0;
+        HP = scale > 0.13f ? MaxHPMed : MaxHPSmall;
         spriteNumber = UnityEngine.Random.Range(1,4);
         SpriteRenderer.sprite = atlas.GetSprite(spriteNumber.ToString());
     }

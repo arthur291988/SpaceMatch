@@ -471,15 +471,15 @@ public class GridManager : MonoBehaviour
         int iteration=0;
         if (CommonData.Instance.getGameHardness() == 0)
         {
-            iteration = UnityEngine.Random.Range(0, 4) < 3 ? UnityEngine.Random.Range(1, 3) : UnityEngine.Random.Range(2, 7);
+            iteration = UnityEngine.Random.Range(0, 5) < 4 ? UnityEngine.Random.Range(1, 3) : UnityEngine.Random.Range(2, 7);
         }
         else if (CommonData.Instance.getGameHardness() == 1)
         {
-            iteration = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(1, 4) : UnityEngine.Random.Range(3, 7);
+            iteration = UnityEngine.Random.Range(0, 4) < 3 ? UnityEngine.Random.Range(1, 4) : UnityEngine.Random.Range(3, 7);
         }
         else if (CommonData.Instance.getGameHardness() == 2)
         {
-            iteration = UnityEngine.Random.Range(0, 2) < 1 ? UnityEngine.Random.Range(1, 4) : UnityEngine.Random.Range(4, 7);
+            iteration = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(1, 4) : UnityEngine.Random.Range(4, 7);
         }
 
         for (int i = 0; i < iteration; i++)
@@ -492,11 +492,11 @@ public class GridManager : MonoBehaviour
             }
             else if (CommonData.Instance.getGameHardness() == 1)
             {
-                value = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(3, 6) : UnityEngine.Random.Range(4, 8);
+                value = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(3, 6) : UnityEngine.Random.Range(4, 9);
             }
             else if (CommonData.Instance.getGameHardness() == 2)
             {
-                value = UnityEngine.Random.Range(0, 2) < 1 ? UnityEngine.Random.Range(3, 7) : UnityEngine.Random.Range(4, 8);
+                value = UnityEngine.Random.Range(0, 2) < 1 ? UnityEngine.Random.Range(3, 7) : UnityEngine.Random.Range(4, 9);
             }
             EnemyFleetManager.instance.distributeResources(index, value, value);
         }
