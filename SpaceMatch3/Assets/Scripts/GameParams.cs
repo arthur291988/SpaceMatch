@@ -26,6 +26,21 @@ public class GameParams
 
     };
 
+    //index is level
+    public static List<string> assistantTextEng = new List<string> {
+        "--Greetings Captain of the Solar Federation.\r\n--We have received a disturbing message from the borders of the Federation, we were attacked by hostile aliens.\r\n--" +
+        "--You must fly to the boundary sectors and fight off the first wave of attack\r\n--Good luck Captain!\r\n",
+        "--You were able to defeat a squad of weaklings\r\n--I will take revenge on you by destroying this planet\r\n--You will all burn\r\n",
+        "--Well well, you were able to defeat the insignificant Filsh\r\n--I'm Lord Zerf and you can't compete with me\r\n--Marauders crush these ants and plunder this planet\r\n",
+        "--Coming to my station you signed your own death warrant\r\n--Prepare for death\r\n--And then I will destroy this planet\r\n",
+        "--I can't believe Filsh and my brother Zerf are destroyed.\r\n--I have sent my elite squad to destroy your red planet and I will go to your main planet myself\r\n--Now you are definitely finished, Emperor Seres will be pleased\r\n",
+        "--Is my squad destroyed?!\r\n--In the name of the Emperor, I will wipe you all into stardust\r\n--May the strongest win!\r\n",
+        "--Nothingness!\r\n--How dare you stand against my troops\r\n--From the very beginning, our goal was your star, I plan to drain all its energy\r\n--And you will die like insects\r\n--Death to you!\r\n"
+
+    };
+
+
+
     public static List<string> levelNameTextEng = new List<string> {
         "Battle on the border",
         "Protection of Neptune",
@@ -36,7 +51,8 @@ public class GameParams
         "Emperor at the Sun"
     };
 
-    public static List<string> AlienNameTextEng = new List<string> {
+    public static List<string> CharactersNameTextEng = new List<string> {
+        "Assistant",
         "Lord Filsh",
         "Lord Zerf",
         "Admiral Zerbo",
@@ -45,6 +61,11 @@ public class GameParams
 
     public static List <string> getAlienTextList() {
         if (language == 0) return alienTextEng;
+        else return null;
+    }
+    public static List<string> getAssistantTextList()
+    {
+        if (language == 0) return assistantTextEng;
         else return null;
     }
     public static List<string> getLevelName()
@@ -66,9 +87,9 @@ public class GameParams
 
         return startWord;
     }
-    public static List<string> getAlienName()
+    public static List<string> getCharacterName()
     {
-        if (language == 0) return AlienNameTextEng;
+        if (language == 0) return CharactersNameTextEng;
         else return null;
     }
 }

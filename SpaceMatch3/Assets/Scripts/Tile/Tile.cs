@@ -6,7 +6,7 @@ using UnityEngine;
 public class Tile : MonoBehaviour
 {
     //private static Tile selected; // 1 
-    private SpriteRenderer Renderer; // 2
+    //private SpriteRenderer Renderer; // 2
     //[NonSerialized]
     public Vector2 Position;
     //[NonSerialized]
@@ -48,8 +48,8 @@ public class Tile : MonoBehaviour
     [NonSerialized]
     public bool isControlTile;
 
-    [NonSerialized]
-    public bool toRemove;
+    //[NonSerialized]
+    //public bool toRemove;
 
     private float moveSpeed;
 
@@ -61,6 +61,12 @@ public class Tile : MonoBehaviour
     [NonSerialized]
     public List<GameObject> ObjectPulledList;
 
+    [NonSerialized]
+    public GameObject ObjectPulledGatherTile;
+    [NonSerialized]
+    public List<GameObject> ObjectPulledListGatherTile;
+
+
     //private void OnEnable()
     //{
     //    isMoving=false;
@@ -70,34 +76,36 @@ public class Tile : MonoBehaviour
 
     private void OnEnable()
     {
-        toRemove = false;
+        //toRemove = false;
         moveSpeed = 0.15f; // 0.15
-        Renderer = GetComponent<SpriteRenderer>();
-        _transform = transform;
-        _gameObject = _transform.gameObject;
+        //if (Renderer==null) Renderer = GetComponent<SpriteRenderer>();
+        if (_transform == null) _transform = transform;
+        if (_gameObject == null) _gameObject = _transform.gameObject;
         swipeSessionStarted = false;
-        isMatched = false;
+        //isMatched = false;
         //animator.SetBool("fallAnim", false);
         //animator.SetBool("trambleAnim", false);
     }
 
 
-    public void Select() // 4
-    {
-        Renderer.color = Color.grey;
-    }
+    //public void Select() // 4
+    //{
+    //    Renderer.color = Color.grey;
+    //}
 
-    public void Unselect() // 5 
-    {
-        Renderer.color = Color.white;
-    }
+    //public void Unselect() // 5 
+    //{
+    //    Renderer.color = Color.white;
+    //}
 
     public void DisactivateTile()
     {
         isMoving = false;
         isControlTile = false;
+        isMatched = false;
         _transform.localScale = Vector3.one;
         makeBurst();
+        makeGatherTile();
         _gameObject.SetActive(false);
     }
 
@@ -107,6 +115,27 @@ public class Tile : MonoBehaviour
         ObjectPulled = ObjectPuller.current.GetGameObjectFromPull(ObjectPulledList);
         ObjectPulled.transform.position = _transform.position;
         ObjectPulled.SetActive(true);
+    }
+
+    private void makeGatherTile()
+    {
+        ObjectPulledListGatherTile = ObjectPuller.current.GetGatherTilePullList();
+        ObjectPulledGatherTile = ObjectPuller.current.GetGameObjectFromPull(ObjectPulledListGatherTile);
+        GatherTile gatherTile = ObjectPulledGatherTile.GetComponent<GatherTile>();
+        
+        if (gatherTile._transform == null) gatherTile._transform = ObjectPulledGatherTile.transform;
+        gatherTile._transform.position = _transform.position;
+        if (gatherTile._spriteRenderer == null)
+        {
+            SpriteRenderer renderer = ObjectPulledGatherTile.GetComponent<SpriteRenderer>();
+            gatherTile._spriteRenderer = renderer;
+        }
+        gatherTile.spriteNumber = spriteNumber;
+        gatherTile._spriteRenderer.sprite = GridManager.Instance.ghaterTilesAtlas.GetSprite(spriteNumber.ToString());// _spriteRenderer.sprite;
+        gatherTile.indexOfResource = indexOfResource;
+        gatherTile.setInitialCommand();
+        ObjectPulledGatherTile.SetActive(true);
+        GridManager.Instance.gatherTiles.Add(gatherTile);
     }
 
     private void OnMouseDown() //6
@@ -145,7 +174,8 @@ public class Tile : MonoBehaviour
 
     private void OnMouseDrag()
     {
-        if (!GridManager.Instance.isSwiping && swipeSessionStarted && !GridManager.Instance.isSwipingBack && !GridManager.Instance.tilesAreMoving && !GameManager.instance.getFightIsOn())
+        if (!GridManager.Instance.isSwiping && swipeSessionStarted && !GridManager.Instance.isSwipingBack && !GridManager.Instance.tilesAreMoving 
+            && !GameManager.instance.getFightIsOn() && !GridManager.Instance.GatherTilesAreMovingToShips)
         {
             touchDragPos = CommonData.Instance._camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
             if ((touchDragPos - touchStartPos).magnitude > maxSwipeDistance)

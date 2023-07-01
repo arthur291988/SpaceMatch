@@ -153,7 +153,7 @@ public class EnemyFleetManager : MonoBehaviour
         {
             for (int i = 0; i < value; i++)
             {
-                nextShipToEnergy.increaseEnergy(1);
+                nextShipToEnergy.increaseEnergy();
                 assignNextShipToEnergy();
             }
         }
@@ -161,8 +161,8 @@ public class EnemyFleetManager : MonoBehaviour
         {
             for (int i = 0; i < value; i++)
             {
-                if (nextShipToShield.shield.activeInHierarchy) nextShipToShield.healShield(ShieldAddValue);
-                else nextShipToShield.cumulateShiled(ShieldAddValue);
+                if (nextShipToShield.shield.activeInHierarchy) nextShipToShield.healShield();
+                else nextShipToShield.cumulateShiled();
 
                 assignNextShipToShield();
             }
@@ -171,7 +171,7 @@ public class EnemyFleetManager : MonoBehaviour
         {
             for (int i = 0; i < value; i++)
             {
-                nextShipToHP.healHP(HPAddValue);
+                nextShipToHP.healHP();
                 assignNextShipToHP();
             }
         }

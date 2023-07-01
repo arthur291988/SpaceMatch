@@ -18,6 +18,8 @@ public class AudioManager : MonoBehaviour
     private AudioSource tileSound0;
     [SerializeField]
     private AudioSource tileSound1;
+    [SerializeField]
+    private AudioSource reloadSound;
 
     private void Awake()
     {
@@ -39,4 +41,7 @@ public class AudioManager : MonoBehaviour
         else tileSound1.Play();
     }
 
+    public void reloadPlay() {
+        reloadSound.Play();
+    }
 }

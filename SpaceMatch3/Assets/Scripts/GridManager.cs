@@ -2,9 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Resources;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.U2D;
+using static UnityEngine.Rendering.DebugUI;
 
 public class GridManager : MonoBehaviour
 {
@@ -16,6 +18,7 @@ public class GridManager : MonoBehaviour
 
     //public List<Sprite> Sprites = new List<Sprite>();
     public SpriteAtlas spriteAtlass;
+    public SpriteAtlas ghaterTilesAtlas;
     //public GameObject TilePrefab;
     //public int GridDimension = 8;
 
@@ -54,6 +57,8 @@ public class GridManager : MonoBehaviour
 
     [NonSerialized]
     public bool tilesAreMoving;
+    [NonSerialized]
+    public bool GatherTilesAreMovingToShips;
 
     private bool controlTileIsAssigned; //is used to assign if first moving tile is assigned as control, this tile will return the sygnal back to this class from Tile class that tiles have finished the movement
     private bool swipeMatch; // is used to identify if the match occured after player swipe not after combo match;
@@ -63,6 +68,21 @@ public class GridManager : MonoBehaviour
 
     public static GridManager Instance { get; private set; }
 
+    [NonSerialized]
+    public List<GatherTile> gatherTiles;
+
+    [SerializeField]
+    private ParticleSystem comboEffect;
+    [NonSerialized]
+    public Vector2 comboPlacePosition;
+
+
+    [NonSerialized]
+    public GameObject ObjectPulledGatherTile;
+    [NonSerialized]
+    public List<GameObject> ObjectPulledListGatherTile;
+    [SerializeField]
+    private Sprite aimingSprite;
 
     void Awake()
     {
@@ -72,6 +92,8 @@ public class GridManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gatherTiles = new List<GatherTile>();
+        comboPlacePosition = new Vector2(0,-7);
         comboCount = 0;
         swipeMatch = false;
         GridWidth = 7;
@@ -360,24 +382,328 @@ public class GridManager : MonoBehaviour
         }
 
         //adding according resources if there is more than one resource matched, if only one then added only so
-        PlayerFleetManager.instance.distributeResources(index1, index1Value, index1Value);
-        if (index2Value > 0) PlayerFleetManager.instance.distributeResources(index2, index2Value, index2Value);
-        if (index3Value > 0) PlayerFleetManager.instance.distributeResources(index3, index3Value, index3Value);
-        if (index4Value > 0) PlayerFleetManager.instance.distributeResources(index4, index4Value, index4Value);
+        //PlayerFleetManager.instance.distributeResources(index1, index1Value, index1Value);
+        //if (index2Value > 0) PlayerFleetManager.instance.distributeResources(index2, index2Value, index2Value);
+        //if (index3Value > 0) PlayerFleetManager.instance.distributeResources(index3, index3Value, index3Value);
+        //if (index4Value > 0) PlayerFleetManager.instance.distributeResources(index4, index4Value, index4Value);
+
+        if (index1Value>=5 || index2Value>=5 || index3Value >= 5 || index4Value >= 5) AudioManager.Instance.tilePlay(5);
+        else AudioManager.Instance.tilePlay(3);
+
+        //process combo resources
+        if (index1Value > 3)
+        {
+            if (!comboEffect.isPlaying) comboEffect.Play();
+            processPlayerCombo(index1, index1Value);
+        }
+        if (index2Value > 3)
+        {
+            if (!comboEffect.isPlaying) comboEffect.Play();
+            processPlayerCombo(index2, index2Value);
+        }
+        if (index3Value > 3)
+        {
+            if (!comboEffect.isPlaying) comboEffect.Play();
+            processPlayerCombo(index3, index3Value);
+        }
+        if (index4Value > 3)
+        {
+            if (!comboEffect.isPlaying) comboEffect.Play();
+            processPlayerCombo(index4, index4Value);
+        }
+
         //GameManager.instance.stopTheTimer();
 
-        for (int i = 0; i < toDisactivateTiles.Count; i++)
-        {
-            toDisactivateTiles[i].DisactivateTile();
-        }
+        //for (int i = 0; i < toDisactivateTiles.Count; i++)
+        //{
+        //    Debug.Log(toDisactivateTiles.Count);
+        //    toDisactivateTiles[i].DisactivateTile();
+        //}
 
         foreach (Tile tile in Grid)
         {
-            if (tile.Position != tile.MoveToPosition) tile.moveTo();
+            if (tile.Position != tile.MoveToPosition)
+            {
+                tile.moveTo(); 
+                //movingTiles.Add(tile);
+            }
         }
         tilesAreMoving = true;
     }
 
+    public void processPlayerCombo(int index, int comboValue)
+    {
+        if (comboValue == 4)
+        {
+            int randonIndex = UnityEngine.Random.Range(0, 5);
+            for (int i = 0; i < 2; i++)
+            {
+                makeGatherTile(randonIndex);
+            }
+        }
+
+        //0 - shot, 1 - energy, 2 - shield, 3 - HP 
+        if (comboValue == 5)
+        {
+            if (index == 0)
+            {
+                //4 is aim, 3 - value
+                for (int i = 0; i < 3; i++)
+                {
+                    makeGatherTile(4);
+                }
+                //1 is energy, 3 - value
+                for (int i = 0; i < 3; i++)
+                {
+                    makeGatherTile(1);
+                }
+
+                //0 is shot, 2 - value
+                for (int i = 0; i < 2; i++)
+                {
+                    makeGatherTile(0);
+                }
+            }
+            if (index == 1)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    makeGatherTile(2);
+                }
+                for (int i = 0; i < 1; i++)
+                {
+                    makeGatherTile(4);
+                }
+                for (int i = 0; i < 2; i++)
+                {
+                    makeGatherTile(0);
+                }
+            }
+            if (index == 2)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    makeGatherTile(1);
+                }
+                for (int i = 0; i < 3; i++)
+                {
+                    makeGatherTile(3);
+                }
+                for (int i = 0; i < 1; i++)
+                {
+                    makeGatherTile(4);
+                }
+            }
+            if (index == 3)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    makeGatherTile(1);
+                }
+                for (int i = 0; i < 3; i++)
+                {
+                    makeGatherTile(2);
+                }
+                for (int i = 0; i < 1; i++)
+                {
+                    makeGatherTile(4);
+                }
+            }
+        }
+        if (comboValue == 6)
+        {
+            if (index == 0)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    makeGatherTile(4);
+                }
+                for (int i = 0; i < 4; i++)
+                {
+                    makeGatherTile(1);
+                }
+                for (int i = 0; i < 2; i++)
+                {
+                    makeGatherTile(0);
+                }
+                for (int i = 0; i < 2; i++)
+                {
+                    makeGatherTile(3);
+                }
+            }
+            if (index == 1)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    makeGatherTile(2);
+                }
+                for (int i = 0; i < 3; i++)
+                {
+                    makeGatherTile(0);
+                }
+                for (int i = 0; i < 2; i++)
+                {
+                    makeGatherTile(1);
+                }
+                for (int i = 0; i < 2; i++)
+                {
+                    makeGatherTile(3);
+                }
+                for (int i = 0; i < 2; i++)
+                {
+                    makeGatherTile(4);
+                }
+            }
+            if (index == 2)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    makeGatherTile(3);
+                }
+                for (int i = 0; i < 3; i++)
+                {
+                    makeGatherTile(1);
+                }
+                for (int i = 0; i < 2; i++)
+                {
+                    makeGatherTile(4);
+                }
+                for (int i = 0; i < 2; i++)
+                {
+                    makeGatherTile(0);
+                }
+            }
+            if (index == 3)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    makeGatherTile(1);
+                }
+                for (int i = 0; i < 3; i++)
+                {
+                    makeGatherTile(2);
+                }
+                for (int i = 0; i < 2; i++)
+                {
+                    makeGatherTile(0);
+                }
+                for (int i = 0; i < 2; i++)
+                {
+                    makeGatherTile(4);
+                }
+            }
+        }
+        if (comboValue == 7)
+        {
+            if (index == 0)
+            {
+                for (int i = 0; i < 7; i++)
+                {
+                    makeGatherTile(4);
+                }
+                for (int i = 0; i < 6; i++)
+                {
+                    makeGatherTile(1);
+                }
+                for (int i = 0; i < 3; i++)
+                {
+                    makeGatherTile(0);
+                }
+                for (int i = 0; i < 3; i++)
+                {
+                    makeGatherTile(3);
+                }
+
+            }
+            if (index == 1)
+            {
+                for (int i = 0; i < 6; i++)
+                {
+                    makeGatherTile(2);
+                }
+                for (int i = 0; i < 5; i++)
+                {
+                    makeGatherTile(0);
+                }
+                for (int i = 0; i < 3; i++)
+                {
+                    makeGatherTile(1);
+                }
+                for (int i = 0; i < 2; i++)
+                {
+                    makeGatherTile(3);
+                }
+                for (int i = 0; i < 3; i++)
+                {
+                    makeGatherTile(4);
+                }
+            }
+            if (index == 2)
+            {
+                for (int i = 0; i < 7; i++)
+                {
+                    makeGatherTile(3);
+                }
+                for (int i = 0; i < 5; i++)
+                {
+                    makeGatherTile(1);
+                }
+                for (int i = 0; i < 3; i++)
+                {
+                    makeGatherTile(4);
+                }
+                for (int i = 0; i < 3; i++)
+                {
+                    makeGatherTile(0);
+                }
+            }
+            if (index == 3)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    makeGatherTile(1);
+                }
+                for (int i = 0; i < 5; i++)
+                {
+                    makeGatherTile(2);
+                }
+                for (int i = 0; i < 4; i++)
+                {
+                    makeGatherTile(0);
+                }
+                for (int i = 0; i < 3; i++)
+                {
+                    makeGatherTile(4);
+                }
+            }
+        }
+
+    }
+
+    private void makeGatherTile(int index)
+    {
+        ObjectPulledListGatherTile = ObjectPuller.current.GetGatherTilePullList();
+        ObjectPulledGatherTile = ObjectPuller.current.GetGameObjectFromPull(ObjectPulledListGatherTile);
+        GatherTile gatherTile = ObjectPulledGatherTile.GetComponent<GatherTile>();
+
+        if (gatherTile._transform == null) gatherTile._transform = ObjectPulledGatherTile.transform;
+        gatherTile._transform.position = comboPlacePosition;
+        if (gatherTile._spriteRenderer == null)
+        {
+            SpriteRenderer renderer = ObjectPulledGatherTile.GetComponent<SpriteRenderer>();
+            gatherTile._spriteRenderer = renderer;
+        }
+
+        int spriteNo = index + 1;
+        if (index != 4) gatherTile._spriteRenderer.sprite = ghaterTilesAtlas.GetSprite(spriteNo.ToString());
+        else gatherTile._spriteRenderer.sprite = aimingSprite;
+
+        gatherTile.spriteNumber = spriteNo;
+        gatherTile.indexOfResource = index;
+        gatherTile.setInitialCommand();
+        ObjectPulledGatherTile.SetActive(true);
+        gatherTiles.Add(gatherTile);
+    }
 
     private void pullNewTile(int column, int row, int multiplier)
     {
@@ -451,7 +777,6 @@ public class GridManager : MonoBehaviour
     public IEnumerator checkMatchesCoroutine()
     {
         yield return new WaitForSeconds(0.2f);
-        tilesAreMoving = false;
         if (CheckMatches())
         {
             controlTileIsAssigned = false;
@@ -460,11 +785,38 @@ public class GridManager : MonoBehaviour
         else
         {
             //GameManager.instance.setFightOn(true);
-            PlayerFleetManager.instance.checkActionsOfFleet();
-            CPUAttackProcess();
+            StartCoroutine(tilesAreMovingFalse());
             //GameManager.instance.checkAllShipsIfActionIsFinished();
         }
     }
+
+    private void checkActionsOfShips() {
+        PlayerFleetManager.instance.checkActionsOfFleet();
+        CPUAttackProcess();
+    }
+    
+    //set false swipe match because the following chain checks only combo matches
+    public void checkMatchesAfterTilesMoveStopped()
+    {
+        swipeMatch = false;
+        comboCount++; //to multiply on resource manager class to increase combo counts in case of bonuse is activated
+        StartCoroutine(checkMatchesCoroutine());
+    }
+
+    public IEnumerator tilesAreMovingFalse()
+    {
+        yield return new WaitForSeconds(0.8f);
+        tilesAreMoving = false;
+        GatherTilesAreMovingToShips = true;
+        PlayerFleetManager.instance.distributeResources();
+
+        AudioManager.Instance.reloadPlay();
+    }
+    //public IEnumerator GatherTilesAreMovingFalse()
+    //{
+    //    yield return new WaitForSeconds(0.5f);
+    //    GatherTilesAreMovingToShips = false;
+    //}
 
     public void CPUAttackProcess()
     { //CPU turn loop
@@ -503,12 +855,17 @@ public class GridManager : MonoBehaviour
         EnemyFleetManager.instance.checkActionsOfFleet();
     }
 
-    //set false swipe match because the following chain checks only combo matches
-    public void checkMatchesAfterTilesMoveStopped()
+
+    private void Update()
     {
-        swipeMatch = false;
-        comboCount++; //to multiply on resource manager class to increase combo counts in case of bonuse is activated
-        StartCoroutine(checkMatchesCoroutine());
+        if (GatherTilesAreMovingToShips)
+        {
+            if (gatherTiles.Count < 1)
+            {
+                checkActionsOfShips();
+                GatherTilesAreMovingToShips = false;
+            }
+        }
     }
 
 

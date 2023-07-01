@@ -10,12 +10,15 @@ public class ObjectPuller : MonoBehaviour
     private int pullOfObjects100 = 100;
     private int pullOfObjects10 = 10;
     private int pullOfObjects15 = 15;
+    private int pullOfObjects60 = 60;
     private int pullOfObjects3 = 3;
     private bool willGrow;
 
 
     [SerializeField]
     private GameObject Tiles;
+    [SerializeField]
+    private GameObject GatherTiles;
 
     [SerializeField]
     private GameObject playerFlagshipShot;
@@ -68,22 +71,23 @@ public class ObjectPuller : MonoBehaviour
     private GameObject shieldCruisBurst;
 
 
-    [SerializeField]
-    private GameObject HPGather;
-    [SerializeField]
-    private GameObject ShotGather;
-    [SerializeField]
-    private GameObject EnergyGather;
-    [SerializeField]
-    private GameObject ShieldGather;
-    [SerializeField]
-    private GameObject AimGather;
+    //[SerializeField]
+    //private GameObject HPGather;
+    //[SerializeField]
+    //private GameObject ShotGather;
+    //[SerializeField]
+    //private GameObject EnergyGather;
+    //[SerializeField]
+    //private GameObject ShieldGather;
+    //[SerializeField]
+    //private GameObject AimGather;
 
     [SerializeField]
     private GameObject Asteroid;
     
 
     private List<GameObject> TilesList;
+    private List<GameObject> GatherTilesList;
 
     private List<GameObject> playerFlagshipShotList;
     private List<GameObject> playerCruiserShotList;
@@ -113,11 +117,11 @@ public class ObjectPuller : MonoBehaviour
     private List<GameObject> shieldCruisBurstList;
 
 
-    private List<GameObject> HPGatherList;
-    private List<GameObject> ShotGatherList;
-    private List<GameObject> EnergyGatherList;
-    private List<GameObject> ShieldGatherList;
-    private List<GameObject> AimGatherList;
+    //private List<GameObject> HPGatherList;
+    //private List<GameObject> ShotGatherList;
+    //private List<GameObject> EnergyGatherList;
+    //private List<GameObject> ShieldGatherList;
+    //private List<GameObject> AimGatherList;
 
     private List<GameObject> AsteroidsList;
 
@@ -131,8 +135,9 @@ public class ObjectPuller : MonoBehaviour
     private void OnEnable()
     {
         TilesList = new List<GameObject>();
+        GatherTilesList = new List<GameObject>();
 
-
+        
         playerFlagshipShotList = new List<GameObject>();
         playerCruiserShotList = new List<GameObject>();
         playerDestrShotList = new List<GameObject>();
@@ -162,11 +167,11 @@ public class ObjectPuller : MonoBehaviour
         shieldCruisBurstList = new List<GameObject>();
 
 
-        HPGatherList = new List<GameObject>();
-        ShotGatherList = new List<GameObject>();
-        EnergyGatherList = new List<GameObject>();
-        ShieldGatherList = new List<GameObject>();
-        AimGatherList = new List<GameObject>();
+        //HPGatherList = new List<GameObject>();
+        //ShotGatherList = new List<GameObject>();
+        //EnergyGatherList = new List<GameObject>();
+        //ShieldGatherList = new List<GameObject>();
+        //AimGatherList = new List<GameObject>();
 
         AsteroidsList = new List<GameObject>();
 
@@ -177,6 +182,12 @@ public class ObjectPuller : MonoBehaviour
             obj1.SetActive(false);
             TilesList.Add(obj1);
 
+        }
+        for (int i = 0; i < pullOfObjects60; i++)
+        {
+            GameObject obj1 = Instantiate(GatherTiles);
+            obj1.SetActive(false);
+            GatherTilesList.Add(obj1);
         }
 
         for (int i = 0; i < pullOfObjects10; i++)
@@ -257,26 +268,26 @@ public class ObjectPuller : MonoBehaviour
             obj6.SetActive(false);
             enemyDestrShotList.Add(obj6); 
             
-            GameObject obj10 = Instantiate(HPGather);
-            obj10.SetActive(false);
-            HPGatherList.Add(obj10);
+            //GameObject obj10 = Instantiate(HPGather);
+            //obj10.SetActive(false);
+            //HPGatherList.Add(obj10);
 
-            GameObject obj11 = Instantiate(ShotGather);
-            obj11.SetActive(false);
-            ShotGatherList.Add(obj11);
+            //GameObject obj11 = Instantiate(ShotGather);
+            //obj11.SetActive(false);
+            //ShotGatherList.Add(obj11);
 
-            GameObject obj12 = Instantiate(EnergyGather);
-            obj12.SetActive(false);
-            EnergyGatherList.Add(obj12);
+            //GameObject obj12 = Instantiate(EnergyGather);
+            //obj12.SetActive(false);
+            //EnergyGatherList.Add(obj12);
 
 
-            GameObject obj13 = Instantiate(ShieldGather);
-            obj13.SetActive(false);
-            ShieldGatherList.Add(obj13);
+            //GameObject obj13 = Instantiate(ShieldGather);
+            //obj13.SetActive(false);
+            //ShieldGatherList.Add(obj13);
 
-            GameObject obj14 = Instantiate(AimGather);
-            obj14.SetActive(false);
-            AimGatherList.Add(obj14);
+            //GameObject obj14 = Instantiate(AimGather);
+            //obj14.SetActive(false);
+            //AimGatherList.Add(obj14);
 
             GameObject obj15 = Instantiate(Asteroid);
             obj15.SetActive(false);
@@ -318,6 +329,10 @@ public class ObjectPuller : MonoBehaviour
     public List<GameObject> GetTilePullList()
     {
         return TilesList;
+    }
+    public List<GameObject> GetGatherTilePullList()
+    {
+        return GatherTilesList;
     }
     public List<GameObject> GetPlayerShotPullList(int indexOfShip)
     {
@@ -383,14 +398,14 @@ public class ObjectPuller : MonoBehaviour
         else if (index == 2) return ShieldBurstList;
         else return HPBurstList;
     }
-    public List<GameObject> GetGatherList(int index)
-    {
-        if (index == 0) return ShotGatherList;
-        else if (index == 1) return EnergyGatherList;
-        else if (index == 2) return ShieldGatherList;
-        else if (index == 3) return HPGatherList;
-        else return AimGatherList;
-    }
+    //public List<GameObject> GetGatherList(int index)
+    //{
+    //    if (index == 0) return ShotGatherList;
+    //    else if (index == 1) return EnergyGatherList;
+    //    else if (index == 2) return ShieldGatherList;
+    //    else if (index == 3) return HPGatherList;
+    //    else return AimGatherList;
+    //}
 
     public List<GameObject> GetAsteroidsList()
     {

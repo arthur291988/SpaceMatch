@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public class PlayerFleetManager : MonoBehaviour
 {
@@ -18,13 +20,11 @@ public class PlayerFleetManager : MonoBehaviour
     [NonSerialized]
     public Ship nextShipToShield;
 
-    private GameObject ObjectPulled;
-    private List<GameObject> ObjectPulledList;
+    //private GameObject ObjectPulled;
+    //private List<GameObject> ObjectPulledList;
 
     public static PlayerFleetManager instance;
 
-    private float HPAddValue;
-    private float ShieldAddValue;
 
     private void Awake()
     {
@@ -50,8 +50,6 @@ public class PlayerFleetManager : MonoBehaviour
         nextShipToShot = playerFleet[0];
         nextShipToHP = playerFleet[0];
         nextShipToShield = playerFleet[0];
-        HPAddValue = 0.2f;
-        ShieldAddValue = 0.3f; //uses energy
     }
 
     public void assignNextShipToEnergy()
@@ -149,181 +147,216 @@ public class PlayerFleetManager : MonoBehaviour
         }
     }
 
-    public void distributeResources(int index, int value, int comboValue)
+    public void distributeResources(/*int index, int value, int comboValue*/)
     {
-        //shot
-        if (index == 0)
+
+        for (int i = 0; i < GridManager.Instance.gatherTiles.Count; i++)
         {
-            for (int i = 0; i < value; i++)
+            //shot
+            if (GridManager.Instance.gatherTiles[i].indexOfResource == 0)
             {
-                makeGather(index, nextShipToShot.shipPosition);
-                nextShipToShot.increaseShotPower();
+                GridManager.Instance.gatherTiles[i].setMoveToShipCommand(nextShipToShot.shipPosition, nextShipToShot);
                 assignNextShipToShot();
             }
-        }
-        //energy
-        else if (index == 1)
-        {
-            for (int i = 0; i < value; i++)
+            //energy
+            else if (GridManager.Instance.gatherTiles[i].indexOfResource == 1)
             {
-                makeGather(index, nextShipToEnergy.shipPosition);
-                nextShipToEnergy.increaseEnergy(1);
+                GridManager.Instance.gatherTiles[i].setMoveToShipCommand(nextShipToEnergy.shipPosition, nextShipToEnergy);
                 assignNextShipToEnergy();
             }
-        }
-        //shield
-        else if (index == 2)
-        {
-            for (int i = 0; i < value; i++)
+            //shield
+            else if (GridManager.Instance.gatherTiles[i].indexOfResource == 2)
             {
-                makeGather(index, nextShipToShield.shipPosition);
-                if (nextShipToShield.shield.activeInHierarchy) nextShipToShield.healShield(ShieldAddValue);
-                else nextShipToShield.cumulateShiled(ShieldAddValue);
-
+                GridManager.Instance.gatherTiles[i].setMoveToShipCommand(nextShipToShield.shipPosition, nextShipToShield);
                 assignNextShipToShield();
             }
-        }
-        //HP
-        else if (index == 3)
-        {
-            for (int i = 0; i < value; i++)
+            //HP
+            else if (GridManager.Instance.gatherTiles[i].indexOfResource == 3)
             {
-                makeGather(index, nextShipToHP.shipPosition);
-                nextShipToHP.healHP(HPAddValue);
+                GridManager.Instance.gatherTiles[i].setMoveToShipCommand(nextShipToHP.shipPosition, nextShipToHP);
                 assignNextShipToHP();
             }
-        }
-        //aiming add accures randomely
-        else if (index == 4)
-        {
-            if (playerFleet.Count > 0) {
-                for (int i = 0; i < value; i++)
+            //aiming add accures randomely
+            else if (GridManager.Instance.gatherTiles[i].indexOfResource == 4)
+            {
+                if (playerFleet.Count > 0)
                 {
                     Ship ship = playerFleet[UnityEngine.Random.Range(0, playerFleet.Count)];
-                    makeGather(index, ship.shipPosition);
-                    ship.increaseAimingCount();
+                    GridManager.Instance.gatherTiles[i].setMoveToShipCommand(ship.shipPosition, ship);
                 }
             }
         }
-        if (comboValue > 3) processCombo(index, comboValue);
 
-        AudioManager.Instance.tilePlay(value);
+        ////shot
+        //if (index == 0)
+        //{
+        //    for (int i = 0; i < value; i++)
+        //    {
+        //        //makeGather(index, nextShipToShot.shipPosition);
+        //        nextShipToShot.increaseShotPower();
+        //        assignNextShipToShot();
+        //    }
+        //}
+        ////energy
+        //else if (index == 1)
+        //{
+        //    for (int i = 0; i < value; i++)
+        //    {
+        //        //makeGather(index, nextShipToEnergy.shipPosition);
+        //        nextShipToEnergy.increaseEnergy();
+        //        assignNextShipToEnergy();
+        //    }
+        //}
+        ////shield
+        //else if (index == 2)
+        //{
+        //    for (int i = 0; i < value; i++)
+        //    {
+        //        //makeGather(index, nextShipToShield.shipPosition);
+        //        if (nextShipToShield.shield.activeInHierarchy) nextShipToShield.healShield();
+        //        else nextShipToShield.cumulateShiled();
+
+        //        assignNextShipToShield();
+        //    }
+        //}
+        ////HP
+        //else if (index == 3)
+        //{
+        //    for (int i = 0; i < value; i++)
+        //    {
+        //        //makeGather(index, nextShipToHP.shipPosition);
+        //        nextShipToHP.healHP();
+        //        assignNextShipToHP();
+        //    }
+        //}
+        //aiming add accures randomely
+
+        //if (comboValue > 3) processCombo(index, comboValue);
+
     }
+
+
+    //foreach (GatherTile gatherTile in GridManager.Instance.gatherTiles)
+    //{
+
+    //}
+
 
     //0-shot; 1-energy, 2-Shield, 3-HP 4-Aim
-    private void makeGather(int index, Vector2 position)
+    //private void makeGather(int index, Vector2 position)
+    //{
+    //    ObjectPulledList = ObjectPuller.current.GetGatherList(index);
+    //    ObjectPulled = ObjectPuller.current.GetGameObjectFromPull(ObjectPulledList);
+    //    ObjectPulled.transform.position = position;
+    //    ObjectPulled.SetActive(true);
+    //}
+
+    //public void processCombo(int index, int comboValue) {
+    //    if (comboValue == 4) {
+    //        distributeResources(UnityEngine.Random.Range(0,5),2,0); //0 is default, 2 meanse two additional random resource
+
+
+    //    }
+
+    //    //0 - shot, 1 - energy, 2 - shield, 3 - HP 
+    //    if (comboValue == 5) {
+    //        if (index == 0)
+    //        {
+    //            distributeResources(4, 3, 0); //4 is aim, 3 - value, 0 is default no combo call, 
+    //            distributeResources(1, 3, 0); //1 is energy, 3 - value, 0 is default no combo call, 
+    //            distributeResources(0, 2, 0); //0 is shot, 2 - value, 0 is default no combo call, 
+    //        }
+    //        if (index == 1)
+    //        {
+    //            distributeResources(2, 3, 0); 
+    //            distributeResources(4, 1, 0); 
+    //            distributeResources(0, 2, 0); 
+    //        }
+    //        if (index == 2)
+    //        {
+    //            distributeResources(1, 3, 0); 
+    //            distributeResources(3, 3, 0);  
+    //            distributeResources(4, 1, 0); 
+    //        }
+    //        if (index == 3)
+    //        {
+    //            distributeResources(1, 3, 0); 
+    //            distributeResources(2, 3, 0); 
+    //            distributeResources(4, 1, 0); 
+    //        }
+    //    }
+    //    if (comboValue == 6)
+    //    {
+    //        if (index == 0)
+    //        {
+    //            distributeResources(4, 5, 0); 
+    //            distributeResources(1, 4, 0); 
+    //            distributeResources(0, 2, 0);  
+    //            distributeResources(3, 2, 0);
+    //        }
+    //        if (index == 1)
+    //        {
+    //            distributeResources(2, 4, 0);
+    //            distributeResources(0, 3, 0);
+    //            distributeResources(1, 2, 0);
+    //            distributeResources(3, 2, 0);
+    //            distributeResources(4, 2, 0);
+    //        }
+    //        if (index == 2)
+    //        {
+    //            distributeResources(3, 5, 0);
+    //            distributeResources(1, 3, 0);
+    //            distributeResources(4, 2, 0);
+    //            distributeResources(0, 2, 0);
+    //        }
+    //        if (index == 3)
+    //        {
+    //            distributeResources(1, 3, 0);
+    //            distributeResources(2, 3, 0);
+    //            distributeResources(0, 2, 0);
+    //            distributeResources(4, 2, 0);
+    //        }
+    //    }
+    //    if (comboValue == 7)
+    //    {
+    //        if (index == 0)
+    //        {
+    //            distributeResources(4, 7, 0);
+    //            distributeResources(1, 6, 0);
+    //            distributeResources(0, 3, 0);
+    //            distributeResources(3, 3, 0);
+    //        }
+    //        if (index == 1)
+    //        {
+    //            distributeResources(2, 6, 0);
+    //            distributeResources(0, 5, 0);
+    //            distributeResources(1, 3, 0);
+    //            distributeResources(3, 2, 0);
+    //            distributeResources(4, 3, 0);
+    //        }
+    //        if (index == 2)
+    //        {
+    //            distributeResources(3, 7, 0);
+    //            distributeResources(1, 5, 0);
+    //            distributeResources(4, 3, 0);
+    //            distributeResources(0, 3, 0);
+    //        }
+    //        if (index == 3)
+    //        {
+    //            distributeResources(1, 5, 0);
+    //            distributeResources(2, 5, 0);
+    //            distributeResources(0, 4, 0);
+    //            distributeResources(4, 3, 0);
+    //        }
+    //    }
+
+    //}
+
+
+
+    public void checkActionsOfFleet()
     {
-        ObjectPulledList = ObjectPuller.current.GetGatherList(index);
-        ObjectPulled = ObjectPuller.current.GetGameObjectFromPull(ObjectPulledList);
-        ObjectPulled.transform.position = position;
-        ObjectPulled.SetActive(true);
-    }
-
-    public void processCombo(int index, int comboValue) {
-        if (comboValue == 4) {
-            distributeResources(UnityEngine.Random.Range(0,5),2,0); //0 is default, 2 meanse two additional random resource
-        }
-
-        //0 - shot, 1 - energy, 2 - shield, 3 - HP 
-        if (comboValue == 5) {
-            if (index == 0)
-            {
-                distributeResources(4, 3, 0); //4 is aim, 3 - value, 0 is default no combo call, 
-                distributeResources(1, 3, 0); //1 is energy, 3 - value, 0 is default no combo call, 
-                distributeResources(0, 2, 0); //0 is shot, 2 - value, 0 is default no combo call, 
-            }
-            if (index == 1)
-            {
-                distributeResources(2, 3, 0); 
-                distributeResources(4, 1, 0); 
-                distributeResources(0, 2, 0); 
-            }
-            if (index == 2)
-            {
-                distributeResources(1, 3, 0); 
-                distributeResources(3, 3, 0);  
-                distributeResources(4, 1, 0); 
-            }
-            if (index == 3)
-            {
-                distributeResources(1, 3, 0); 
-                distributeResources(2, 3, 0); 
-                distributeResources(4, 1, 0); 
-            }
-        }
-        if (comboValue == 6)
-        {
-            if (index == 0)
-            {
-                distributeResources(4, 5, 0); 
-                distributeResources(1, 4, 0); 
-                distributeResources(0, 2, 0);  
-                distributeResources(3, 2, 0);
-            }
-            if (index == 1)
-            {
-                distributeResources(2, 4, 0);
-                distributeResources(0, 3, 0);
-                distributeResources(1, 2, 0);
-                distributeResources(3, 2, 0);
-                distributeResources(4, 2, 0);
-            }
-            if (index == 2)
-            {
-                distributeResources(3, 5, 0);
-                distributeResources(1, 3, 0);
-                distributeResources(4, 2, 0);
-                distributeResources(0, 2, 0);
-            }
-            if (index == 3)
-            {
-                distributeResources(1, 3, 0);
-                distributeResources(2, 3, 0);
-                distributeResources(0, 2, 0);
-                distributeResources(4, 2, 0);
-            }
-        }
-        if (comboValue == 7)
-        {
-            if (index == 0)
-            {
-                distributeResources(4, 7, 0);
-                distributeResources(1, 6, 0);
-                distributeResources(0, 3, 0);
-                distributeResources(3, 3, 0);
-            }
-            if (index == 1)
-            {
-                distributeResources(2, 6, 0);
-                distributeResources(0, 5, 0);
-                distributeResources(1, 3, 0);
-                distributeResources(3, 2, 0);
-                distributeResources(4, 3, 0);
-            }
-            if (index == 2)
-            {
-                distributeResources(3, 7, 0);
-                distributeResources(1, 5, 0);
-                distributeResources(4, 3, 0);
-                distributeResources(0, 3, 0);
-            }
-            if (index == 3)
-            {
-                distributeResources(1, 5, 0);
-                distributeResources(2, 5, 0);
-                distributeResources(0, 4, 0);
-                distributeResources(4, 3, 0);
-            }
-        }
-    }
-
-    public void checkActionsOfFleet() {
         foreach (Ship ship in playerFleet) ship.checkActions();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

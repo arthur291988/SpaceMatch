@@ -150,8 +150,8 @@ public class GameManager : MonoBehaviour
                     }
                 }
                 Ship ship = shipObject.GetComponent<Ship>();
-                ship.StartSettings();
                 shipObject.SetActive(true);
+                if (i!=0) ship.StartSettings(); //if ship is destroyer then its position is defined later while adding second destroyer
                 ship.activatePowerShiledOnStart();
 
                 //if ship is detroyer there necessery to put extra one in one placement
@@ -163,8 +163,9 @@ public class GameManager : MonoBehaviour
                     shipObject2.transform.position = new Vector2(basePointX - destroyerXGap, yStepLocal);
 
                     Ship ship2 = shipObject2.GetComponent<Ship>();
-                    ship2.StartSettings();
                     shipObject2.SetActive(true);
+                    ship.StartSettings(); //if ship is destroyer then its position is defined here
+                    ship2.StartSettings();
                     ship2.activatePowerShiledOnStart();
                 }
 
@@ -222,9 +223,12 @@ public class GameManager : MonoBehaviour
                 }
 
                 Ship ship = shipObject.GetComponent<Ship>();
-                ship.StartSettings();
                 shipObject.SetActive(true);
-                ship.activatePowerShiledOnStart();
+                if (i != 0)
+                {
+                    ship.StartSettings(); //if ship is destroyer then its position is defined later while adding second destroyer
+                    ship.activatePowerShiledOnStart(); //power shield activated later with second one
+                }
 
                 //if ship is detroyer there necessery to put extra one in one placement
                 if (i == 0)
@@ -235,8 +239,10 @@ public class GameManager : MonoBehaviour
                     shipObject2.transform.position = new Vector2(basePointX - destroyerXGap, yStepLocal);
 
                     Ship ship2 = shipObject2.GetComponent<Ship>();
-                    ship2.StartSettings();
                     shipObject2.SetActive(true);
+                    ship.StartSettings(); //if ship is destroyer then its position is defined here
+                    ship.activatePowerShiledOnStart();
+                    ship2.StartSettings();
                     ship2.activatePowerShiledOnStart();
                 }
 

@@ -86,10 +86,15 @@ public class Ship : MonoBehaviour
 
     public int indexOfShip;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
+    [NonSerialized]
+    public float HPAddValue;
+    [NonSerialized]
+    public float ShieldAddValue;
+    [NonSerialized]
+    public float energyAddValue;
+    [NonSerialized]
+    public float shotAddValue;
+
 
     public virtual void StartSettings() {
         if (_gameObject == null) _gameObject = gameObject;
@@ -108,6 +113,10 @@ public class Ship : MonoBehaviour
         preBursteffec.SetActive(false);
         shotingCoroutineIsOn = false;
         actionsAreOn = false;
+        HPAddValue = 0.2f;
+        ShieldAddValue = 0.3f; //uses energy
+        energyAddValue = 1;
+        shotAddValue = 1;
     }
 
 
@@ -159,9 +168,9 @@ public class Ship : MonoBehaviour
         updateEnergyLine();
     }
 
-    public void increaseEnergy(float value)
+    public void increaseEnergy()
     {
-        if (energy < energyMax) energy += value;
+        energy+=energyAddValue;
         if (energy > energyMax) energy = energyMax;
         updateEnergyLine();
     }
@@ -220,8 +229,8 @@ public class Ship : MonoBehaviour
         //GameManager.instance.checkAllShipsIfActionIsFinished();
     }
 
-    public void cumulateShiled(float value) {
-        if (!shield.activeInHierarchy) shieldCumulation += value;
+    public void cumulateShiled() {
+        if (!shield.activeInHierarchy) shieldCumulation += ShieldAddValue;
         updateShieldLine();
     }
 
@@ -243,12 +252,12 @@ public class Ship : MonoBehaviour
     }
 
 
-    public void healShield(float value)
+    public void healShield()
     {
-        if (shieldClass.shieldEnergy < shieldEnergyMax && value <= energy)
+        if (shieldClass.shieldEnergy < shieldEnergyMax && ShieldAddValue <= energy)
         {
-            consumeEnergy(value);
-            shieldClass.shieldEnergy += value;
+            consumeEnergy(ShieldAddValue);
+            shieldClass.shieldEnergy += ShieldAddValue;
             shieldClass.updateShieldLine();
         }
         if (shieldClass.shieldEnergy > shieldEnergyMax)
@@ -258,8 +267,8 @@ public class Ship : MonoBehaviour
         }
     }
 
-    public void healHP(float value) {
-        HP += value; 
+    public void healHP() {
+        HP += HPAddValue; 
         if (HP > HPMax) HP = HPMax;
         if (preBursteffec.activeInHierarchy && HP > HPMax * 0.3f) preBursteffec.SetActive(false);
         updateLifeLine();
@@ -267,7 +276,7 @@ public class Ship : MonoBehaviour
 
 
     public void increaseShotPower() {
-        shotEnergy++;
+        shotEnergy+= shotAddValue;
         if (shotEnergyMax < shotEnergy) shotEnergy = shotEnergyMax;
 
         updateShotLine();

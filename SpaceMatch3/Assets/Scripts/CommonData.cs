@@ -61,7 +61,7 @@ public class CommonData : MonoBehaviour
             [6] = new List<int> { 2, 2, 6, 0 }
         };
 
-        heardnessListByLevel = new List<int> { 1, 0, 1, 1, 1, 2, 2 }; //index is key and value is heardness level 
+        heardnessListByLevel = new List<int> { 0, 0, 0, 1, 1, 1, 1 }; //index is key and value is heardness level 
     }
 
     public void setGameLevelAndHardness(int value) {
