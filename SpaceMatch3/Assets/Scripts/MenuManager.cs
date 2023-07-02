@@ -23,9 +23,6 @@ public class MenuManager : MonoBehaviour
     private TextMeshProUGUI levelCount;
 
     [SerializeField]
-    private AudioSource alienVoice;
-
-    [SerializeField]
     private TextMeshProUGUI StartWord;
     [SerializeField]
     private TextMeshProUGUI CharacterName;
@@ -39,6 +36,8 @@ public class MenuManager : MonoBehaviour
     private GameObject messageButton;
     [SerializeField]
     private GameObject startButton;
+    [SerializeField]
+    private GameObject discordButton;
 
     private bool assistantTextFinished;
 
@@ -46,7 +45,7 @@ public class MenuManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameParams.achievedLevel = 6;
+        GameParams.achievedLevel = 7;
         GameParams.currentLevel = GameParams.achievedLevel;
 
         //StartCoroutine(TypeText());
@@ -60,7 +59,7 @@ public class MenuManager : MonoBehaviour
 
     private IEnumerator TypeAssistantText()
     {
-        alienVoice.Play();
+        AudioManager.Instance.assistantVoiceFunc(true);
         characterText.text = "";
 
         assistantTextFinished = true;
@@ -70,12 +69,23 @@ public class MenuManager : MonoBehaviour
             yield return null;
         }
 
-        messageButton.SetActive(true);
-        alienVoice.Stop();
+        //last level and last message from assistant TO DO FOR DEVELOP
+        if (GameParams.achievedLevel == 7 && GameParams.achievedLevel == GameParams.currentLevel)
+        {
+            messageButton.SetActive(false);
+            AudioManager.Instance.messageVoiceFunc(false);
+            discordButton.SetActive(true);
+        }
+        else
+        {
+            messageButton.SetActive(true);
+            AudioManager.Instance.messageVoiceFunc(true);
+        }
+        AudioManager.Instance.assistantVoiceFunc(false);
     }
     private IEnumerator TypeAlienText()
     {
-        alienVoice.Play();
+        AudioManager.Instance.alienVoiceFunc(true);
         characterText.text = "";
         foreach (char letter in GameParams.getAlienTextList()[GameParams.currentLevel])
         {
@@ -83,7 +93,7 @@ public class MenuManager : MonoBehaviour
             yield return null;
         }
 
-        alienVoice.Stop();
+        AudioManager.Instance.alienVoiceFunc(false);
     }
 
     private void setLevelparameters()
@@ -99,11 +109,16 @@ public class MenuManager : MonoBehaviour
         if (GameParams.currentLevel == 0) prevButton.interactable = false;
         else if (!prevButton.interactable) prevButton.interactable = true;
 
-        alienVoice.Stop();
+        AudioManager.Instance.alienVoiceFunc(false);
+        AudioManager.Instance.assistantVoiceFunc(false);
+
         StopAllCoroutines();
         characterText.text = "";
         messageButton.SetActive(true);
+        AudioManager.Instance.messageVoiceFunc(true);
+
         startButton.SetActive(false);
+        discordButton.SetActive(false);
         assistantTextFinished = false;
     }
 
@@ -134,16 +149,19 @@ public class MenuManager : MonoBehaviour
             }
 
             StopAllCoroutines();
-            alienVoice.Stop();
+            AudioManager.Instance.assistantVoiceFunc(false);
             StartCoroutine(TypeAlienText());
         }
         else
         {
             messageButton.SetActive(false);
             StopAllCoroutines();
-            alienVoice.Stop();
+            AudioManager.Instance.assistantVoiceFunc(false);
             StartCoroutine(TypeAssistantText());
         }
+
+        AudioManager.Instance.connectionVoice();
+        AudioManager.Instance.messageVoiceFunc(false);
     } 
 
     public void switchTheLevel(bool next) {

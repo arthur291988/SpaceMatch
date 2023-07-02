@@ -20,6 +20,18 @@ public class AudioManager : MonoBehaviour
     private AudioSource tileSound1;
     [SerializeField]
     private AudioSource reloadSound;
+    [SerializeField]
+    private AudioSource victorySound;
+    [SerializeField]
+    private AudioSource alarmSound;
+    [SerializeField]
+    private AudioSource alienVoice;
+    [SerializeField]
+    private AudioSource assistantVoice;
+    [SerializeField]
+    private AudioSource messageAlarm;
+    [SerializeField]
+    private AudioSource connectionEstablished;
 
     private void Awake()
     {
@@ -43,5 +55,30 @@ public class AudioManager : MonoBehaviour
 
     public void reloadPlay() {
         reloadSound.Play();
+    }
+
+    public void endGameSoundPlay(bool victory)
+    {
+        if (victory) victorySound.Play();
+        else alarmSound.Play();
+    }
+
+    public void alienVoiceFunc(bool play) {
+        if (play) alienVoice.Play();
+        else alienVoice.Stop();
+    }
+    public void assistantVoiceFunc(bool play)
+    {
+        if (play) assistantVoice.Play();
+        else assistantVoice.Stop();
+    }
+    public void messageVoiceFunc(bool play)
+    {
+        if (play) messageAlarm.Play();
+        else messageAlarm.Stop();
+    }
+    public void connectionVoice()
+    {
+        connectionEstablished.Play();
     }
 }

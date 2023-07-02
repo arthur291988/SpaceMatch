@@ -44,6 +44,13 @@ public class GameManager : MonoBehaviour
     //public Image UpTimerImg;
     //public Image DownTimerImg;
 
+    [SerializeField]
+    private GameObject alarmPanel;
+    [SerializeField]
+    private GameObject defeatButton;
+    [SerializeField]
+    private GameObject victoryButton;
+
     private void Awake()
     {
         instance = this;
@@ -273,18 +280,42 @@ public class GameManager : MonoBehaviour
         return movesFrozen;
     }
 
+    //sets fight on and determine if game is over
     public void setFightOn(bool state)
     {
         fightIsOn = state;
         if (!state) {
             //chek if game finished
-            if (EnemyFleetManager.instance.enemyFleet.Count!=0 && PlayerFleetManager.instance.playerFleet.Count != 0) coverBoard.SetActive(state);
-            else if (!coverBoard.activeInHierarchy) coverBoard.SetActive(true);
+            if (EnemyFleetManager.instance.enemyFleet.Count != 0 && PlayerFleetManager.instance.playerFleet.Count != 0) coverBoard.SetActive(state);
+            else {
+                if (!coverBoard.activeInHierarchy) coverBoard.SetActive(true);
+                if (EnemyFleetManager.instance.enemyFleet.Count == 0)
+                {
+                    endGameProcess(true); //victory
+                    GameParams.achievedLevel++;
+                }
+                else endGameProcess(false); //defeat
+            }
         }
         else coverBoard.SetActive(state);
         //if (!fightIsOn) setTheTimer();
     }
 
+
+    private void endGameProcess(bool victory) {
+        if (victory)
+        {
+            victoryButton.SetActive(true);
+        }
+        else
+        {
+            alarmPanel.SetActive(true);
+            defeatButton.SetActive(true);
+        }
+
+
+        AudioManager.Instance.endGameSoundPlay(victory);
+    }
 
 
     public void addShot(Shot shot)
@@ -325,6 +356,11 @@ public class GameManager : MonoBehaviour
         return isFinished;
     }
 
+
+    public void goToMenu()
+    {
+        SceneSwitchManager.LoadMenuScene();
+    }
     
 
     // Update is called once per frame
