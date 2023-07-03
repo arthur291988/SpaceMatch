@@ -251,7 +251,7 @@ public class Ship : MonoBehaviour
         shieldClass.updateShieldLine();
     }
 
-
+    //shield heal consumes energy as well
     public void healShield()
     {
         if (shieldClass.shieldEnergy < shieldEnergyMax && ShieldAddValue <= energy)

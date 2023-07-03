@@ -52,13 +52,13 @@ SpriteAtlas:
   m_PackedSprites:
   - {fileID: 21300000, guid: 63553ea580d1e6e47bf7c738948b5b49, type: 3}
   - {fileID: 21300000, guid: c0f74d66c8792af43b0970f6bc47430c, type: 3}
+  - {fileID: 21300000, guid: 6473c378bfe683d4e98d84c666964550, type: 3}
   - {fileID: 21300000, guid: e3680c78658574c4f978ed0f3703d04f, type: 3}
-  - {fileID: 21300000, guid: a0e9aecdd9c61f048993c6269226c793, type: 3}
   m_PackedSpriteNamesToIndex:
   - 4
   - 3
-  - 2
   - 1
+  - 2
   m_RenderDataMap: {}
   m_Tag: GatherAtlas
   m_IsVariant: 0

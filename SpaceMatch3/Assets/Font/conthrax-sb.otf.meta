@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 402aee5c9ccff1147800ebf66aac45f8
+guid: e633b962abd384d4ba10aa8e64e81dbd
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - GRAND GALAXY
+  - Conthrax
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

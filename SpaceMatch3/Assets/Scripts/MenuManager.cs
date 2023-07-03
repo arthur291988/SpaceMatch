@@ -41,12 +41,15 @@ public class MenuManager : MonoBehaviour
 
     private bool assistantTextFinished;
 
+    private bool alienIsTalking;
+    private bool assistantIsTalking;
 
     // Start is called before the first frame update
     void Start()
     {
-        GameParams.achievedLevel = 7;
+        GameParams.achievedLevel = 6;
         GameParams.currentLevel = GameParams.achievedLevel;
+        GameParams.language = 0;
 
         //StartCoroutine(TypeText());
 
@@ -54,6 +57,7 @@ public class MenuManager : MonoBehaviour
         StartWord.text = GameParams.getStartWord();
 
         setLevelparameters();
+
 
     }
 
@@ -63,12 +67,31 @@ public class MenuManager : MonoBehaviour
         characterText.text = "";
 
         assistantTextFinished = true;
+        assistantIsTalking = true;
         foreach (char letter in GameParams.getAssistantTextList()[GameParams.currentLevel])
         {
             characterText.text += letter;
             yield return null;
         }
+        stopAssistantTalking();
 
+
+    }
+    private IEnumerator TypeAlienText()
+    {
+        AudioManager.Instance.alienVoiceFunc(true);
+        alienIsTalking = true;
+        characterText.text = "";
+        foreach (char letter in GameParams.getAlienTextList()[GameParams.currentLevel])
+        {
+            characterText.text += letter;
+            yield return null;
+        }
+        stopAlienTalking();
+    }
+
+    private void stopAssistantTalking()
+    { 
         //last level and last message from assistant TO DO FOR DEVELOP
         if (GameParams.achievedLevel == 7 && GameParams.achievedLevel == GameParams.currentLevel)
         {
@@ -81,24 +104,20 @@ public class MenuManager : MonoBehaviour
             messageButton.SetActive(true);
             AudioManager.Instance.messageVoiceFunc(true);
         }
+
+        assistantIsTalking = false;
         AudioManager.Instance.assistantVoiceFunc(false);
     }
-    private IEnumerator TypeAlienText()
-    {
-        AudioManager.Instance.alienVoiceFunc(true);
-        characterText.text = "";
-        foreach (char letter in GameParams.getAlienTextList()[GameParams.currentLevel])
-        {
-            characterText.text += letter;
-            yield return null;
-        }
 
+    private void stopAlienTalking()
+    {
+        alienIsTalking = false;
         AudioManager.Instance.alienVoiceFunc(false);
     }
 
     private void setLevelparameters()
     {
-        CharacterName.text = GameParams.CharactersNameTextEng[0];
+        CharacterName.text = GameParams.getCharacterName()[0];
         _characterRenderer.sprite = charactersAtlas.GetSprite("0");
 
         levelTitle.text = GameParams.getLevelName()[GameParams.currentLevel];
@@ -120,6 +139,8 @@ public class MenuManager : MonoBehaviour
         startButton.SetActive(false);
         discordButton.SetActive(false);
         assistantTextFinished = false;
+        alienIsTalking = false;
+        assistantIsTalking = false;
     }
 
     public void nextMessage() {
@@ -129,22 +150,22 @@ public class MenuManager : MonoBehaviour
             startButton.SetActive(true);
             if (GameParams.currentLevel < 2)
             {
-                CharacterName.text = GameParams.CharactersNameTextEng[1];
+                CharacterName.text = GameParams.getCharacterName()[1];
                 _characterRenderer.sprite = charactersAtlas.GetSprite("1");
             }
             else if (GameParams.currentLevel < 4)
             {
-                CharacterName.text = GameParams.CharactersNameTextEng[2];
+                CharacterName.text = GameParams.getCharacterName()[2];
                 _characterRenderer.sprite = charactersAtlas.GetSprite("2");
             }
             else if (GameParams.currentLevel < 6)
             {
-                CharacterName.text = GameParams.CharactersNameTextEng[3];
+                CharacterName.text = GameParams.getCharacterName()[3];
                 _characterRenderer.sprite = charactersAtlas.GetSprite("3");
             }
             else
             {
-                CharacterName.text = GameParams.CharactersNameTextEng[4];
+                CharacterName.text = GameParams.getCharacterName()[4];
                 _characterRenderer.sprite = charactersAtlas.GetSprite("4");
             }
 
@@ -185,7 +206,40 @@ public class MenuManager : MonoBehaviour
     
 
     public void GoToBattle() {
+
+        AudioManager.Instance.connectionVoice();
         SceneSwitchManager.LoadBattleScene();
+    }
+
+    private void Update()
+    {
+        //touch process for Android platform
+        if (assistantIsTalking || alienIsTalking)
+        { 
+            if (Input.touchCount == 1)
+            {
+                Touch _touch = Input.GetTouch(0);
+
+                if (_touch.phase == TouchPhase.Began)
+                {
+                    if (alienIsTalking)
+                    {
+                        StopAllCoroutines();
+                        characterText.text = GameParams.getAlienTextList()[GameParams.currentLevel];
+                        stopAlienTalking();
+                    }
+                    else if (assistantIsTalking)
+                    {
+                        StopAllCoroutines();
+                        characterText.text = GameParams.getAssistantTextList()[GameParams.currentLevel];
+                        stopAssistantTalking();
+
+                    }
+                    AudioManager.Instance.connectionVoice();
+                }
+            }
+        }
+        
     }
 
 }

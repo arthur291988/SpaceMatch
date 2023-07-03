@@ -50,6 +50,7 @@ public class GridManager : MonoBehaviour
     public bool isSwiping;
     [NonSerialized]
     public bool isSwipingBack;
+    private const float swipingSpeed = 0.25f;
 
     [NonSerialized]
     public bool tilesAreMoving;
@@ -86,8 +87,8 @@ public class GridManager : MonoBehaviour
     private bool swipeSessionStarted;
     private Vector2 touchStartPos;
     private Vector2 touchDragPos;
-    private const float maxSwipeDistance = 0.9f;
-    private const float maxAxeDeviation = 0.4f;
+    private const float maxSwipeDistance = 0.4f; //0.9f
+    private const float maxAxeDeviation = 0.3f; //0.4f
     private Tile tileUnderTouch;
 
     void Awake()
@@ -990,8 +991,8 @@ public class GridManager : MonoBehaviour
     {
         if (isSwiping)
         {
-            selectedTileTransform.position = Vector2.Lerp(selectedTileTransform.position, moveToTilePos, 0.2f);
-            moveToTileTransform.position = Vector2.Lerp(moveToTileTransform.position, selectedTilePos, 0.2f);
+            selectedTileTransform.position = Vector2.Lerp(selectedTileTransform.position, moveToTilePos, swipingSpeed);
+            moveToTileTransform.position = Vector2.Lerp(moveToTileTransform.position, selectedTilePos, swipingSpeed);
             if (((Vector2)selectedTileTransform.position - moveToTilePos).magnitude < 0.15f)
             {
 
@@ -1018,8 +1019,8 @@ public class GridManager : MonoBehaviour
 
         if (isSwipingBack)
         {
-            selectedTileTransform.position = Vector2.Lerp(selectedTileTransform.position, selectedTilePos, 0.2f);
-            moveToTileTransform.position = Vector2.Lerp(moveToTileTransform.position, moveToTilePos, 0.2f);
+            selectedTileTransform.position = Vector2.Lerp(selectedTileTransform.position, selectedTilePos, swipingSpeed);
+            moveToTileTransform.position = Vector2.Lerp(moveToTileTransform.position, moveToTilePos, swipingSpeed);
 
             if (((Vector2)selectedTileTransform.position - selectedTilePos).magnitude < 0.15f)
             {

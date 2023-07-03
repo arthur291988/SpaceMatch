@@ -52,7 +52,7 @@ SpriteAtlas:
   m_PackedSprites:
   - {fileID: 21300000, guid: ab78e3b8dc0073f4c96dc9f007d0d7a6, type: 3}
   - {fileID: 21300000, guid: a117b1e8239b1e0449c88a9e5b6f04a1, type: 3}
-  - {fileID: 21300000, guid: 86dd8c2a326b89942afa704233cf9463, type: 3}
+  - {fileID: 21300000, guid: 114d3c9a4bef97e469d8363d81245857, type: 3}
   - {fileID: 21300000, guid: c7f7c25fcfffdad468d4c7392e54fa89, type: 3}
   m_PackedSpriteNamesToIndex:
   - 3

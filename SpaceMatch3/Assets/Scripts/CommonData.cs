@@ -41,10 +41,10 @@ public class CommonData : MonoBehaviour
             [0] = new List<int> { 3, 1, 0 },
             [1] = new List<int> { 4, 3, 0 },
             [2] = new List<int> { 4, 3, 1 },
-            [3] = new List<int> { 5, 2, 2 },
-            [4] = new List<int> { 2, 5, 3 },
-            [5] = new List<int> { 4, 2, 4 },
-            [6] = new List<int> { 2, 2, 6 }
+            [3] = new List<int> { 5, 3, 2 },
+            [4] = new List<int> { 2, 3, 5 },
+            [5] = new List<int> { 3, 3, 4 },
+            [6] = new List<int> { 1, 3, 6 }
         };
 
 
