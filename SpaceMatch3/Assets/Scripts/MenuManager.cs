@@ -44,13 +44,16 @@ public class MenuManager : MonoBehaviour
     private bool alienIsTalking;
     private bool assistantIsTalking;
 
+    [SerializeField]
+    private Camera _camera;
+    private float vertScreenSize;
+
     // Start is called before the first frame update
     void Start()
     {
-        GameParams.achievedLevel = 6;
         GameParams.currentLevel = GameParams.achievedLevel;
-        GameParams.language = 0;
 
+        vertScreenSize = _camera.orthographicSize * 2;
         //StartCoroutine(TypeText());
 
         levelWord.text = GameParams.getLevelWord();
@@ -220,7 +223,7 @@ public class MenuManager : MonoBehaviour
             {
                 Touch _touch = Input.GetTouch(0);
 
-                if (_touch.phase == TouchPhase.Began)
+                if (_touch.phase == TouchPhase.Began && _camera.ScreenToWorldPoint(new Vector3(_touch.position.x, _touch.position.y, 0)).y< vertScreenSize/2-2.5f)
                 {
                     if (alienIsTalking)
                     {

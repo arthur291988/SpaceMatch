@@ -14,6 +14,7 @@ public class GameParams
 
     private static string endGameWord;
     private static string loadingWord;
+    private static string shieldsOffWord;
 
 
     //index is level
@@ -158,6 +159,13 @@ public class GameParams
         else loadingWord = "Загрузка";
 
         return loadingWord;
+    }
+    public static string getShieldOffWord()
+    {
+        if (language == 0) shieldsOffWord = "Shields off";
+        else shieldsOffWord = "Щиты выкл.";
+
+        return shieldsOffWord;
     }
 
     public static List<string> getCharacterName()

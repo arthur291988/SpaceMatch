@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -50,11 +51,23 @@ public class GameManager : MonoBehaviour
     private GameObject defeatButton;
     [SerializeField]
     private GameObject victoryButton;
+    [SerializeField]
+    private TextMeshProUGUI victoryButtonText;
+    [SerializeField]
+    private TextMeshProUGUI defeatButtonText;
+
+    [NonSerialized]
+    public bool noShieldsMode;
+    [SerializeField]
+    private TextMeshProUGUI shieldOffTxt;
+    [SerializeField]
+    private GameObject shieldOffGO;
 
     private void Awake()
     {
         instance = this;
         xStep = 2.2f;
+        noShieldsMode = false;
     }
 
 
@@ -72,7 +85,8 @@ public class GameManager : MonoBehaviour
 
         BackgroundManager.Instance.setBackground();
         BackgroundManager.Instance.pullAsteroidsOnStart();
-
+        victoryButtonText.text = GameParams.getVictoryWord();
+        defeatButtonText.text = GameParams.getDefeatWord();
         //turnTimeMax = 7;
 
         //turnTimeUp = 7;
@@ -286,13 +300,22 @@ public class GameManager : MonoBehaviour
         fightIsOn = state;
         if (!state) {
             //chek if game finished
-            if (EnemyFleetManager.instance.enemyFleet.Count != 0 && PlayerFleetManager.instance.playerFleet.Count != 0) coverBoard.SetActive(state);
-            else {
+            if (EnemyFleetManager.instance.enemyFleet.Count != 0 && PlayerFleetManager.instance.playerFleet.Count != 0)
+            {
+                coverBoard.SetActive(state);
+                if (!noShieldsMode && EnemyFleetManager.instance.enemyFleet.Count <= 5 && PlayerFleetManager.instance.playerFleet.Count <= 5) {
+                    noShieldsMode = true;
+                    shieldOffTxt.text = GameParams.getShieldOffWord();
+                    shieldOffGO.SetActive(true);
+                    StartCoroutine(shieldsOff());
+                }
+            }
+            else
+            {
                 if (!coverBoard.activeInHierarchy) coverBoard.SetActive(true);
                 if (EnemyFleetManager.instance.enemyFleet.Count == 0)
                 {
                     endGameProcess(true); //victory
-                    GameParams.achievedLevel++;
                 }
                 else endGameProcess(false); //defeat
             }
@@ -306,6 +329,8 @@ public class GameManager : MonoBehaviour
         if (victory)
         {
             victoryButton.SetActive(true);
+            if (GameParams.currentLevel == GameParams.achievedLevel) GameParams.achievedLevel++;
+            SaveAndLoad.instance.saveGameData();
         }
         else
         {
@@ -315,6 +340,11 @@ public class GameManager : MonoBehaviour
 
 
         AudioManager.Instance.endGameSoundPlay(victory);
+    }
+
+    private IEnumerator shieldsOff() {
+        yield return new WaitForSeconds(3);
+        shieldOffGO.SetActive(false);
     }
 
 

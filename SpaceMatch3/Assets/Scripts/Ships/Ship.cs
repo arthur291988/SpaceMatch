@@ -230,8 +230,12 @@ public class Ship : MonoBehaviour
     }
 
     public void cumulateShiled() {
-        if (!shield.activeInHierarchy) shieldCumulation += ShieldAddValue;
-        updateShieldLine();
+        //no shield mode is necessary to off the shiled to speed up battle finish in case if there left less than or equal 4 ships from each side
+        if (!GameManager.instance.noShieldsMode)
+        {
+            if (!shield.activeInHierarchy) shieldCumulation += ShieldAddValue;
+            updateShieldLine();
+        }
     }
 
     public void activatePowerShiled() {
@@ -254,16 +258,20 @@ public class Ship : MonoBehaviour
     //shield heal consumes energy as well
     public void healShield()
     {
-        if (shieldClass.shieldEnergy < shieldEnergyMax && ShieldAddValue <= energy)
+        //no shield mode is necessary to off the shiled to speed up battle finish in case if there left less than or equal 4 ships from each side
+        if (!GameManager.instance.noShieldsMode)
         {
-            consumeEnergy(ShieldAddValue);
-            shieldClass.shieldEnergy += ShieldAddValue;
-            shieldClass.updateShieldLine();
-        }
-        if (shieldClass.shieldEnergy > shieldEnergyMax)
-        {
-            shieldClass.shieldEnergy = shieldEnergyMax;
-            shieldClass.updateShieldLine();
+            if (shieldClass.shieldEnergy < shieldEnergyMax && ShieldAddValue <= energy)
+            {
+                consumeEnergy(ShieldAddValue);
+                shieldClass.shieldEnergy += ShieldAddValue;
+                shieldClass.updateShieldLine();
+            }
+            if (shieldClass.shieldEnergy > shieldEnergyMax)
+            {
+                shieldClass.shieldEnergy = shieldEnergyMax;
+                shieldClass.updateShieldLine();
+            }
         }
     }
 
