@@ -830,6 +830,8 @@ public class GridManager : MonoBehaviour
 
     public void CPUAttackProcess()
     { //CPU turn loop
+
+        //first is determined how many combo matches happened on turn
         int iteration=0;
         if (CommonData.Instance.getGameHardness() == 0)
         {
@@ -837,13 +839,19 @@ public class GridManager : MonoBehaviour
         }
         else if (CommonData.Instance.getGameHardness() == 1)
         {
-            iteration = UnityEngine.Random.Range(0, 4) < 3 ? UnityEngine.Random.Range(1, 4) : UnityEngine.Random.Range(3, 7);
+            //TO USE LATER WHILE DEVELOPING IAP now this difficulty is 2 
+            //iteration = UnityEngine.Random.Range(0, 4) < 3 ? UnityEngine.Random.Range(1, 4) : UnityEngine.Random.Range(3, 7); 
+            iteration = UnityEngine.Random.Range(0, 5) < 4 ? UnityEngine.Random.Range(1, 4) : UnityEngine.Random.Range(3, 7);
         }
         else if (CommonData.Instance.getGameHardness() == 2)
         {
-            iteration = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(1, 4) : UnityEngine.Random.Range(4, 7);
+            //TO USE LATER WHILE DEVELOPING IAP now this difficulty is not used because it is too hard
+            //iteration = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(1, 4) : UnityEngine.Random.Range(4, 7); 
+            iteration = UnityEngine.Random.Range(0, 4) < 3 ? UnityEngine.Random.Range(1, 4) : UnityEngine.Random.Range(3, 7);
         }
 
+
+        //second is determined how many tiles matched on one match in above combo matches
         for (int i = 0; i < iteration; i++)
         {
             int index = UnityEngine.Random.Range(0, 4);
@@ -854,11 +862,15 @@ public class GridManager : MonoBehaviour
             }
             else if (CommonData.Instance.getGameHardness() == 1)
             {
-                value = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(3, 6) : UnityEngine.Random.Range(4, 9);
+                //TO USE LATER WHILE DEVELOPING IAP now this difficulty is 2 
+                //value = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(3, 6) : UnityEngine.Random.Range(4, 9);
+                value = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(3, 6) : UnityEngine.Random.Range(4, 8);
             }
             else if (CommonData.Instance.getGameHardness() == 2)
             {
-                value = UnityEngine.Random.Range(0, 2) < 1 ? UnityEngine.Random.Range(3, 7) : UnityEngine.Random.Range(4, 9);
+                //TO USE LATER WHILE DEVELOPING IAP now this difficulty is not used because it is too hard
+                //value = UnityEngine.Random.Range(0, 2) < 1 ? UnityEngine.Random.Range(3, 7) : UnityEngine.Random.Range(4, 9);
+                value = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(3, 6) : UnityEngine.Random.Range(4, 9);
             }
             EnemyFleetManager.instance.distributeResources(index, value, value);
         }

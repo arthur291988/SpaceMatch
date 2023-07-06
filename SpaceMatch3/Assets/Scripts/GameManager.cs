@@ -172,8 +172,11 @@ public class GameManager : MonoBehaviour
                 }
                 Ship ship = shipObject.GetComponent<Ship>();
                 shipObject.SetActive(true);
-                if (i!=0) ship.StartSettings(); //if ship is destroyer then its position is defined later while adding second destroyer
-                ship.activatePowerShiledOnStart();
+                if (i != 0)
+                {
+                    ship.StartSettings(); //if ship is destroyer then its position is defined later while adding second destroyer
+                    ship.activatePowerShiledOnStart();
+                }
 
                 //if ship is detroyer there necessery to put extra one in one placement
                 if (i == 0)
@@ -186,6 +189,7 @@ public class GameManager : MonoBehaviour
                     Ship ship2 = shipObject2.GetComponent<Ship>();
                     shipObject2.SetActive(true);
                     ship.StartSettings(); //if ship is destroyer then its position is defined here
+                    ship.activatePowerShiledOnStart();
                     ship2.StartSettings();
                     ship2.activatePowerShiledOnStart();
                 }
@@ -303,11 +307,12 @@ public class GameManager : MonoBehaviour
             if (EnemyFleetManager.instance.enemyFleet.Count != 0 && PlayerFleetManager.instance.playerFleet.Count != 0)
             {
                 coverBoard.SetActive(state);
-                if (!noShieldsMode && EnemyFleetManager.instance.enemyFleet.Count <= 5 && PlayerFleetManager.instance.playerFleet.Count <= 5) {
+                if (!noShieldsMode && (EnemyFleetManager.instance.enemyFleet.Count <= 4 || PlayerFleetManager.instance.playerFleet.Count <= 4)) {
                     noShieldsMode = true;
                     shieldOffTxt.text = GameParams.getShieldOffWord();
                     shieldOffGO.SetActive(true);
-                    StartCoroutine(shieldsOff());
+                    AudioManager.Instance.alarmSoundPlay(true);
+                    StartCoroutine(shieldsOffMessageTurnOff());
                 }
             }
             else
@@ -342,9 +347,10 @@ public class GameManager : MonoBehaviour
         AudioManager.Instance.endGameSoundPlay(victory);
     }
 
-    private IEnumerator shieldsOff() {
+    private IEnumerator shieldsOffMessageTurnOff() {
         yield return new WaitForSeconds(3);
         shieldOffGO.SetActive(false);
+        AudioManager.Instance.alarmSoundPlay(false);
     }
 
 

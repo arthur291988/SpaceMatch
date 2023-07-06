@@ -38,9 +38,9 @@ public class CommonData : MonoBehaviour
         //0 index- destroyers count (destroyers must be even number always, because they put two on one ship place), 1 index - cruisers count, 2 index - falgships count, 3 - admiral ship
         playerFleetByLevel = new Dictionary<int, List<int>>
         {
-            [0] = new List<int> { 3, 1, 0 },
-            [1] = new List<int> { 4, 3, 0 },
-            [2] = new List<int> { 4, 3, 1 },
+            [0] = new List<int> { 4, 1, 0 },
+            [1] = new List<int> { 4, 4, 0 },
+            [2] = new List<int> { 5, 3, 1 },
             [3] = new List<int> { 5, 3, 2 },
             [4] = new List<int> { 2, 4, 4 },
             [5] = new List<int> { 3, 3, 4 },
@@ -61,7 +61,7 @@ public class CommonData : MonoBehaviour
             [6] = new List<int> { 2, 2, 6, 0 }
         };
 
-        heardnessListByLevel = new List<int> { 0, 0, 0, 1, 1, 1, 1 }; //index is key and value is heardness level 
+        heardnessListByLevel = new List<int> { 0, 0, 0, 1, 1, 2, 2 }; //index is key and value is heardness level 
     }
 
     public void setGameLevelAndHardness(int value) {

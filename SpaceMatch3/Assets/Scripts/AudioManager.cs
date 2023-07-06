@@ -63,6 +63,12 @@ public class AudioManager : MonoBehaviour
         else alarmSound.Play();
     }
 
+    public void alarmSoundPlay(bool play) {
+
+        if (play) alarmSound.Play();
+        else alarmSound.Stop();
+    }
+
     public void alienVoiceFunc(bool play) {
         if (play) alienVoice.Play();
         else alienVoice.Stop();
