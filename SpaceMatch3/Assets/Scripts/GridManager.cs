@@ -841,7 +841,7 @@ public class GridManager : MonoBehaviour
         {
             //TO USE LATER WHILE DEVELOPING IAP now this difficulty is 2 
             //iteration = UnityEngine.Random.Range(0, 4) < 3 ? UnityEngine.Random.Range(1, 4) : UnityEngine.Random.Range(3, 7); 
-            iteration = UnityEngine.Random.Range(0, 5) < 4 ? UnityEngine.Random.Range(1, 4) : UnityEngine.Random.Range(3, 7);
+            iteration = UnityEngine.Random.Range(0, 5) < 4 ? UnityEngine.Random.Range(1, 4) : UnityEngine.Random.Range(3, 6);
         }
         else if (CommonData.Instance.getGameHardness() == 2)
         {
@@ -864,7 +864,7 @@ public class GridManager : MonoBehaviour
             {
                 //TO USE LATER WHILE DEVELOPING IAP now this difficulty is 2 
                 //value = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(3, 6) : UnityEngine.Random.Range(4, 9);
-                value = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(3, 6) : UnityEngine.Random.Range(4, 8);
+                value = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(3, 5) : UnityEngine.Random.Range(4, 8);
             }
             else if (CommonData.Instance.getGameHardness() == 2)
             {

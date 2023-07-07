@@ -9,12 +9,48 @@ public class GameParams
     //0-eng, 1-Rus
     public static int language;
 
+    public static bool storyWatched;
+
+
     private static string levelWord;
     private static string startWord;
 
     private static string endGameWord;
     private static string loadingWord;
     private static string shieldsOffWord;
+
+
+    public static List<string> storyTextEng = new List<string> {
+        "After union of all people in the world, we started to live in harmony and made a giant leap forward",
+
+        "Solar Federation raised from human civilization of Earth. It became single state for everyone",
+
+        "After, we made steps on exploration of the Solar System",
+
+        "In the beginning, it was humble projects on near planets",
+
+        "But, very soon we built up huge colonies on each planet of system",
+
+        "Now humanity is ready to start its journey to the stars",
+
+        "Conquering new worlds and going through all the dangers on its way"
+    };
+
+    public static List<string> storyTextRus = new List<string> {
+        "После объединения всех людей в мире мы начали жить в гармонии и совершили гигантский скачок вперед",
+
+        "Солнечная федерация возникла из человеческой цивилизации Земли. Она стала единым государством для всех",
+
+        "Затем мы предприняли шаги по исследованию Солнечной системы",
+
+        "Вначале это были скромные проекты на ближних планетах",
+
+        "Но очень скоро мы построили огромные колонии на каждой планете системы",
+
+        "Сейчас человечество готово начать свое путешествие к звездам",
+
+        "Покоряя новые миры и преодолевая все опасности на своем пути"
+    };
 
 
     //index is level
@@ -109,7 +145,11 @@ public class GameParams
         "Адмирал Зербо",
         "Император Церес"
     };
-
+    public static List<string> getStoryTextList()
+    {
+        if (language == 0) return storyTextEng;
+        else return storyTextRus;
+    }
     public static List <string> getAlienTextList() {
         if (language == 0) return alienTextEng;
         else return alienTextRus;
@@ -173,4 +213,8 @@ public class GameParams
         if (language == 0) return CharactersNameTextEng;
         else return CharactersNameTextRus;
     }
+
+
+   
+
 }

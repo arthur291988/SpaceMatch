@@ -20,14 +20,13 @@ public class Loader : MonoBehaviour
             loadingGO.AddComponent<LoadingMonoBihave>().StartCoroutine(LoadSceneAsync(index));
         };
         //load the loading scene whitch is always interstitial to a target scene (with special animation)
-        SceneManager.LoadScene(2);
+        SceneManager.LoadScene(3);
     }
 
-    private static IEnumerator switchSceneCoroutine()
-    {
-        yield return new WaitForSeconds(0.5f);
-
-    }
+    //private static IEnumerator switchSceneCoroutine()
+    //{
+    //    yield return new WaitForSeconds(0.5f);
+    //}
 
     private static IEnumerator LoadSceneAsync(int index)
     {

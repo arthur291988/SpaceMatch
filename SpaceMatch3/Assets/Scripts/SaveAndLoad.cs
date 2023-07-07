@@ -11,6 +11,7 @@ public class SaveAndLoad : MonoBehaviour
 
     private string fileName = "SaveData"; //file for save game data
     private string fileNamePref = "PrefData"; //file for save game data
+    private string fileNameStoryWatched = "StoryWatchedData"; //file for save game data
 
     private void Awake()
     {
@@ -34,6 +35,16 @@ public class SaveAndLoad : MonoBehaviour
         else
         {
             GameParams.language = 0;
+        }
+        
+        //load saved firstLoad 
+        if (File.Exists(Application.persistentDataPath + "/" + fileNameStoryWatched + ".art"))
+        {
+            LoadStoryWatchedFromFile();
+        }
+        else
+        {
+            GameParams.storyWatched = false;
         }
     }
 
@@ -93,6 +104,17 @@ public class SaveAndLoad : MonoBehaviour
         sw.Close();
     }
 
+    public void saveStoryWatched()
+    {
+        StreamWriter sw = new StreamWriter(Application.persistentDataPath + "/" + fileNameStoryWatched + ".art");
+        string sp = " "; //space 
+
+        sw.WriteLine(Crypt("storyWatched" + sp + GameParams.storyWatched));
+
+
+        sw.Close();
+    }
+
     private void LoadSavedDataFromFile()
     {
         string[] rows = File.ReadAllLines(Application.persistentDataPath + "/" + fileName + ".art");
@@ -110,8 +132,17 @@ public class SaveAndLoad : MonoBehaviour
         if (int.TryParse(getSavedValue(rows, "language"), out language)) GameParams.language = language;
     }
 
+    private void LoadStoryWatchedFromFile()
+    {
+        string[] rows = File.ReadAllLines(Application.persistentDataPath + "/" + fileNameStoryWatched + ".art");
+
+        bool storyWatched;
+        if (bool.TryParse(getSavedValue(rows, "storyWatched"), out storyWatched)) GameParams.storyWatched = storyWatched;
+    }
+
     private void OnApplicationQuit()
     {
+        saveStoryWatched();
         saveGameData();
         savePlayerPrefs();
     }

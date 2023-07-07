@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class LoaderCallback : MonoBehaviour
 {
-
-
     private bool isFirstUpdateUfterStartTheScene = true;
 
 
