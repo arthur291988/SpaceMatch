@@ -12,6 +12,7 @@ public class SaveAndLoad : MonoBehaviour
     private string fileName = "SaveData"; //file for save game data
     private string fileNamePref = "PrefData"; //file for save game data
     private string fileNameStoryWatched = "StoryWatchedData"; //file for save game data
+    private string fileNamePurchase = "PurchaseData"; //file for save game data
 
     private void Awake()
     {
@@ -45,6 +46,11 @@ public class SaveAndLoad : MonoBehaviour
         else
         {
             GameParams.storyWatched = false;
+        }
+        //load saved firstLoad 
+        if (File.Exists(Application.persistentDataPath + "/" + fileNamePurchase + ".art"))
+        {
+            LoadPurchaseFromFile();
         }
     }
 
@@ -114,6 +120,16 @@ public class SaveAndLoad : MonoBehaviour
 
         sw.Close();
     }
+    public void savePurchases()
+    {
+        StreamWriter sw = new StreamWriter(Application.persistentDataPath + "/" + fileNamePurchase + ".art");
+        string sp = " "; //space 
+
+        sw.WriteLine(Crypt("adsBought" + sp + GameParams.getAdsBought()));
+
+
+        sw.Close();
+    }
 
     private void LoadSavedDataFromFile()
     {
@@ -139,11 +155,19 @@ public class SaveAndLoad : MonoBehaviour
         bool storyWatched;
         if (bool.TryParse(getSavedValue(rows, "storyWatched"), out storyWatched)) GameParams.storyWatched = storyWatched;
     }
+    private void LoadPurchaseFromFile()
+    {
+        string[] rows = File.ReadAllLines(Application.persistentDataPath + "/" + fileNamePurchase + ".art");
+
+        bool adsBought;
+        if (bool.TryParse(getSavedValue(rows, "adsBought"), out adsBought)) GameParams.setAdsBought(adsBought);
+    }
 
     private void OnApplicationQuit()
     {
         saveStoryWatched();
         saveGameData();
         savePlayerPrefs();
+        savePurchases();
     }
 }

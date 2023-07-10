@@ -48,6 +48,9 @@ public class MenuManager : MonoBehaviour
     private Camera _camera;
     private float vertScreenSize;
 
+    [SerializeField]
+    private GameObject rateUsPanel;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -61,7 +64,7 @@ public class MenuManager : MonoBehaviour
 
         setLevelparameters();
 
-
+        if (Random.Range(0,4)==3) showRateUsPanel();
     }
 
     private IEnumerator TypeAssistantText()
@@ -213,6 +216,26 @@ public class MenuManager : MonoBehaviour
         AudioManager.Instance.connectionVoice();
         SceneSwitchManager.LoadBattleScene();
     }
+
+    public void discordButtonPush()
+    {
+        Application.OpenURL("https://discord.gg/A3ezRzNZ");
+
+        //GameAnalitics.instance.LogEvent("Discord_Pushed");
+    }
+
+    public void rateUsButton()
+    {
+        Application.OpenURL("https://play.google.com/store/apps/details?id=com.ArtUR.DefendersRoyal&pli=1");
+
+        //GameAnalitics.instance.LogEvent("Rate_Us_Pushed");
+    }
+
+    private void showRateUsPanel() {
+        rateUsPanel.SetActive(true);
+    }
+
+    public void hideRateUsPanel () => rateUsPanel.SetActive(false);
 
     private void Update()
     {

@@ -63,6 +63,14 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject shieldOffGO;
 
+    [SerializeField]
+    private GameObject noInternetPanel;
+    private bool adsTimerIsOn;
+    private const float adsTimer = 150;
+
+    [SerializeField]
+    private GameObject limitedOfferPanel;
+
     private void Awake()
     {
         instance = this;
@@ -92,6 +100,51 @@ public class GameManager : MonoBehaviour
         //turnTimeUp = 7;
         //turnTimeDown = 0;
         //setTheTimer();
+
+        checkTheInternet();
+    }
+
+
+    public void checkTheInternet() {
+        StartCoroutine(checkInternetConnection((isConnected) => {
+            if (isConnected)
+            {
+                if (noInternetPanel.activeInHierarchy) noInternetPanel.SetActive(false);
+                setAdsTimer(true);
+            }
+            else
+            {
+                noInternetPanel.SetActive(true);
+                setAdsTimer(false);
+            }
+        }));
+    }
+
+    IEnumerator checkInternetConnection(Action<bool> action)
+    {
+        WWW www = new WWW("http://google.com");
+        yield return www;
+        if (www.error != null)
+        {
+            action(false);
+        }
+        else
+        {
+            action(true);
+        }
+    }
+
+    public void setAdsTimer(bool on) => adsTimerIsOn= on;
+
+
+    public void showLimitedOffer()
+    {
+        limitedOfferPanel.SetActive(true);
+    }
+    public void hideLimitedOffer()
+    {
+        AudioManager.Instance.connectionVoice();
+        limitedOfferPanel.SetActive(false);
     }
 
     //private void setTheTimer() {
@@ -302,18 +355,25 @@ public class GameManager : MonoBehaviour
     public void setFightOn(bool state)
     {
         fightIsOn = state;
-        if (!state) {
+        if (!state)
+        {
             //chek if game finished
             if (EnemyFleetManager.instance.enemyFleet.Count != 0 && PlayerFleetManager.instance.playerFleet.Count != 0)
             {
                 coverBoard.SetActive(state);
-                if (!noShieldsMode && (EnemyFleetManager.instance.enemyFleet.Count <= 4 || PlayerFleetManager.instance.playerFleet.Count <= 4)) {
+                if (!noShieldsMode && (EnemyFleetManager.instance.enemyFleet.Count <= 4 || PlayerFleetManager.instance.playerFleet.Count <= 4))
+                {
                     noShieldsMode = true;
                     shieldOffTxt.text = GameParams.getShieldOffWord();
                     shieldOffGO.SetActive(true);
                     AudioManager.Instance.alarmSoundPlay(true);
                     StartCoroutine(shieldsOffMessageTurnOff());
                 }
+                else if (!adsTimerIsOn)
+                {
+                    if (!GameParams.getAdsBought()) InterstitialAd.Instance.ShowAd();
+                }
+
             }
             else
             {
@@ -325,7 +385,10 @@ public class GameManager : MonoBehaviour
                 else endGameProcess(false); //defeat
             }
         }
-        else coverBoard.SetActive(state);
+        else
+        {
+            coverBoard.SetActive(state);
+        }
         //if (!fightIsOn) setTheTimer();
     }
 
@@ -397,7 +460,7 @@ public class GameManager : MonoBehaviour
     {
         SceneSwitchManager.LoadMenuScene();
     }
-    
+
 
     // Update is called once per frame
     //void Update()
@@ -412,4 +475,16 @@ public class GameManager : MonoBehaviour
     //        } 
     //    }
     //}
+
+
+    private void Update()
+    {
+        if (adsTimerIsOn && !GameParams.getAdsBought()) {
+            GameParams.AdsTimer(Time.deltaTime);
+            if (GameParams.getAdsTimer() >= adsTimer) {
+                adsTimerIsOn = false;
+            }
+            Debug.Log(GameParams.getAdsTimer());
+        }
+    }
 }

@@ -821,6 +821,7 @@ public class GridManager : MonoBehaviour
         PlayerFleetManager.instance.distributeResources();
 
         AudioManager.Instance.reloadPlay();
+
     }
     public IEnumerator shipsFinishedToPrepareToAttack()
     {

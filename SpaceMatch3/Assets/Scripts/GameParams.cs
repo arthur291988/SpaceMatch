@@ -19,6 +19,9 @@ public class GameParams
     private static string loadingWord;
     private static string shieldsOffWord;
 
+    private static float adsTimer;
+    private static bool adsOff;
+
 
     public static List<string> storyTextEng = new List<string> {
         "After union of all people in the world, we started to live in harmony and made a giant leap forward",
@@ -214,7 +217,24 @@ public class GameParams
         else return CharactersNameTextRus;
     }
 
+    public static void AdsTimer(float value) {
+        adsTimer += value;
+    }
+    public static void ResetAdsTimer()
+    {
+        adsTimer = 0;
+    }
+    public static float getAdsTimer()
+    {
+        return adsTimer;
+    }
 
-   
 
+    public static void setAdsBought(bool state) {
+        adsOff = state;
+    }
+
+    public static bool getAdsBought() {
+        return adsOff;
+    }
 }
