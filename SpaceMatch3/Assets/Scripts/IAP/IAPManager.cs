@@ -13,7 +13,14 @@ public class IAPManager : MonoBehaviour
 
     public void buyNoAdsSpecial() {
         GameParams.setAdsBought(true);
-        SaveAndLoad.instance.savePurchases(); 
-        GameManager.instance.showLimitedOffer();
+        SaveAndLoad.instance.savePurchases();
+        ShopWhileBattle.instance.updateNoAdsSpecialUIAfterPurchase();
+
+    }
+    public void buyNoAdsFromMenu()
+    {
+        GameParams.setAdsBought(true);
+        SaveAndLoad.instance.savePurchases();
+        ShopManager.instance.updateNoAdsUIAfterPUrchase();
     }
 }

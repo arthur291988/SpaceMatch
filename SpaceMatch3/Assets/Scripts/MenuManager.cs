@@ -221,6 +221,7 @@ public class MenuManager : MonoBehaviour
     {
         Application.OpenURL("https://discord.gg/A3ezRzNZ");
 
+        AudioManager.Instance.connectionVoice();
         //GameAnalitics.instance.LogEvent("Discord_Pushed");
     }
 
@@ -228,6 +229,7 @@ public class MenuManager : MonoBehaviour
     {
         Application.OpenURL("https://play.google.com/store/apps/details?id=com.ArtUR.DefendersRoyal&pli=1");
 
+        AudioManager.Instance.connectionVoice();
         //GameAnalitics.instance.LogEvent("Rate_Us_Pushed");
     }
 
@@ -235,7 +237,11 @@ public class MenuManager : MonoBehaviour
         rateUsPanel.SetActive(true);
     }
 
-    public void hideRateUsPanel () => rateUsPanel.SetActive(false);
+    public void hideRateUsPanel()
+    {
+        rateUsPanel.SetActive(false);
+        AudioManager.Instance.connectionVoice();
+    }
 
     private void Update()
     {

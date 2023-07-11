@@ -374,6 +374,9 @@ GameObject:
   m_Component:
   - component: {fileID: 69414978}
   - component: {fileID: 69414977}
+  - component: {fileID: 69414979}
+  - component: {fileID: 69414980}
+  - component: {fileID: 69414981}
   m_Layer: 0
   m_Name: IAPManager
   m_TagString: Untagged
@@ -408,6 +411,47 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &69414979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 69414976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 304cdf90237483f41b471e4cbf0bbaec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NO_ADS: NO_ADS
+  NO_ADS_SPECIAL: NO_ADS_SPECIAL
+--- !u!114 &69414980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 69414976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e5d29078abb90c488fd188536f6e1c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  priceOfNOAds: {fileID: 1479708158}
+  buyNoAdsButton: {fileID: 1606281587}
+  limitedOfferPanel: {fileID: 256864280}
+--- !u!114 &69414981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 69414976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bd1cb6c4de216d4397a1b4885bb7794, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &75173313
 GameObject:
   m_ObjectHideFlags: 0
@@ -1300,7 +1344,6 @@ GameObject:
   - component: {fileID: 256864281}
   - component: {fileID: 256864284}
   - component: {fileID: 256864283}
-  - component: {fileID: 256864282}
   m_Layer: 5
   m_Name: LimitedOffer
   m_TagString: Untagged
@@ -1335,21 +1378,6 @@ RectTransform:
   m_AnchoredPosition: {x: 750, y: 0}
   m_SizeDelta: {x: 1500, y: 1500}
   m_Pivot: {x: 1, y: 0.5}
---- !u!114 &256864282
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 256864280}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ca7cfce9ecceba428300afc5437c65c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shopPanelRectTransform: {fileID: 256864281}
-  buyNoAdsButton: {fileID: 1606281587}
-  shopOpenButton: {fileID: 1130252516}
 --- !u!114 &256864283
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1443,7 +1471,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 9.99$
+  m_text: 5.99$
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8bf230348953ed449aa6159b0397e9ca, type: 2}
   m_sharedMaterial: {fileID: 3963545186310786087, guid: 8bf230348953ed449aa6159b0397e9ca, type: 2}
@@ -1470,7 +1498,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 201.5
+  m_fontSize: 203.25
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3096,6 +3124,80 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &621851800
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 621851801}
+  - component: {fileID: 621851803}
+  - component: {fileID: 621851802}
+  m_Layer: 5
+  m_Name: NoShieldPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &621851801
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 621851800}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1522605702}
+  m_Father: {fileID: 1956199791}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 897.2}
+  m_SizeDelta: {x: 1600, y: 500}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &621851802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 621851800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 2800000, guid: c2cf5422748625d43b8659b8dbe4e268, type: 3}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+--- !u!222 &621851803
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 621851800}
+  m_CullTransparentMesh: 1
 --- !u!1 &623153565
 GameObject:
   m_ObjectHideFlags: 0
@@ -10050,9 +10152,8 @@ MonoBehaviour:
   victoryButtonText: {fileID: 1222888746}
   defeatButtonText: {fileID: 2140379744}
   shieldOffTxt: {fileID: 1522605703}
-  shieldOffGO: {fileID: 1522605701}
+  shieldOffGO: {fileID: 621851800}
   noInternetPanel: {fileID: 1603886286}
-  limitedOfferPanel: {fileID: 256864280}
 --- !u!4 &1105267448
 Transform:
   m_ObjectHideFlags: 0
@@ -10195,8 +10296,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1105267447}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+      - m_Target: {fileID: 69414980}
+        m_TargetAssemblyTypeName: ShopWhileBattle, Assembly-CSharp
         m_MethodName: hideLimitedOffer
         m_Mode: 1
         m_Arguments:
@@ -11691,7 +11792,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 4.99$
+  m_text: 3.99$
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8bf230348953ed449aa6159b0397e9ca, type: 2}
   m_sharedMaterial: {fileID: 3963545186310786087, guid: 8bf230348953ed449aa6159b0397e9ca, type: 2}
@@ -11718,7 +11819,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 199.75
+  m_fontSize: 203.25
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -11943,7 +12044,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1522605702
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11951,18 +12052,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1522605701}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1956199791}
-  m_RootOrder: 4
+  m_Father: {fileID: 621851801}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 897.2}
-  m_SizeDelta: {x: 1500, y: 500}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 1400, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1522605703
 MonoBehaviour:
@@ -12011,15 +12112,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 220.75
+  m_fontSize: 200
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 500
+  m_fontSizeMax: 200
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 4096
+  m_HorizontalAlignment: 32
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -12582,9 +12683,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 69414977}
-        m_TargetAssemblyTypeName: IAPManager, Assembly-CSharp
-        m_MethodName: buyNoAdsSpecial
+      - m_Target: {fileID: 69414979}
+        m_TargetAssemblyTypeName: IAPManagerOfGame, Assembly-CSharp
+        m_MethodName: BuyNOAdsSpecial
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -13815,7 +13916,7 @@ RectTransform:
   - {fileID: 1037815386}
   - {fileID: 953129042}
   - {fileID: 234309507}
-  - {fileID: 1522605702}
+  - {fileID: 621851801}
   - {fileID: 256864281}
   - {fileID: 1603886287}
   m_Father: {fileID: 0}

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,11 +20,12 @@ public class ShopManager : MonoBehaviour
     private Vector2 shopPanelCloseMoveToPos;
     private Vector2 shopPanelOpenMoveToPos;
     private Vector2 shopPanelClosePos;
-
+    [SerializeField]
+    private TextMeshProUGUI priceOfNOAds;
 
     private void Awake()
     {
-        instance = this;
+        instance = this; 
     }
 
     private void Start()
@@ -32,6 +34,7 @@ public class ShopManager : MonoBehaviour
         shopPanelClosePos = new Vector2(1500, 0);
         shopPanelOpenMoveToPos= new Vector2(-100, 0);
         shopPanelRectTransform = GetComponent<RectTransform>();
+        updateNoAdsUIOnStart();
     }
 
 
@@ -49,6 +52,30 @@ public class ShopManager : MonoBehaviour
         }
 
         AudioManager.Instance.connectionVoice();
+    }
+
+    public void updateNoAdsUIOnStart() {
+        if (GameParams.getAdsBought())
+        {
+            priceOfNOAds.text = "V";
+            priceOfNOAds.color = Color.green;
+            buyNoAdsButton.interactable = false;    
+        }
+        else StartCoroutine(setStorePrice());
+    }
+
+    public void updateNoAdsUIAfterPUrchase()
+    {
+        priceOfNOAds.text = "V";
+        priceOfNOAds.color = Color.green;
+        buyNoAdsButton.interactable = false;
+    }
+
+    IEnumerator setStorePrice ()  {
+        while (!IAPManagerOfGame.instance.IsInitialized()) {
+            yield return null;
+            priceOfNOAds.text = IAPManagerOfGame.instance.getProductPriceFromStore(IAPManagerOfGame.instance.NO_ADS);
+        }
     }
 
 

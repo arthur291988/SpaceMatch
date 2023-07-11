@@ -49,8 +49,8 @@ public class Tile : MonoBehaviour
     [NonSerialized]
     public int indexOfResource; //0-shot; 1-energy, 2-Shield, 3-HP
 
-    [NonSerialized]
-    public bool isControlTile;
+    //[NonSerialized]
+    //public bool isControlTile;
 
     //[NonSerialized]
     //public bool toRemove;
@@ -111,7 +111,7 @@ public class Tile : MonoBehaviour
     public void DisactivateTile()
     {
         isMoving = false;
-        isControlTile = false;
+        //isControlTile = false;
         isMatched = false;
         _transform.localScale = Vector3.one;
         makeBurst();
@@ -267,11 +267,12 @@ public class Tile : MonoBehaviour
                 isMoving = false;
                 //StartCoroutine(fallAnim());
                 fallAnimPlay();
-                if (isControlTile)
-                {
-                    isControlTile = false;
-                    GridManager.Instance.checkMatchesAfterTilesMoveStopped();
-                }
+                if (GridManager.Instance.movingDownTiles.Contains(this)) GridManager.Instance.movingDownTiles.Remove(this);
+                //if (isControlTile)
+                //{
+                //    isControlTile = false;
+                //    GridManager.Instance.checkMatchesAfterTilesMoveStopped();
+                //}
             }
         }
     }

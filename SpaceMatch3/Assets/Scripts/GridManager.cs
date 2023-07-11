@@ -53,14 +53,18 @@ public class GridManager : MonoBehaviour
     private const float swipingSpeed = 0.25f;
 
     [NonSerialized]
-    public bool tilesAreMoving;
+    public bool tilesAreMoving; //this one monitors movin of whole session of tile moves from player swipe to attack
     [NonSerialized]
     public bool GatherTilesAreMovingToShips;
     private bool shipsPrepareToAttack; //this one is used to prevent the bug of moving the tiles after resource gather process has finished but ships haven't started attack yet
 
-    private bool controlTileIsAssigned; //is used to assign if first moving tile is assigned as control, this tile will return the sygnal back to this class from Tile class that tiles have finished the movement
+    //private bool controlTileIsAssigned; //is used to assign if first moving tile is assigned as control, this tile will return the sygnal back to this class from Tile class that tiles have finished the movement
     private bool swipeMatch; // is used to identify if the match occured after player swipe not after combo match;
     private int comboCount; // is used to identify the count of combo match to add bonus resources
+
+    [NonSerialized]
+    public List<Tile> movingDownTiles;
+    private bool tilesMovingDown; //this one monitor movin of tile only untill next match
 
     //private Tile controlTile;
 
@@ -106,7 +110,8 @@ public class GridManager : MonoBehaviour
         GridWidth = 7;
         GridHeight = 7;
         Distance = 1.4f;
-        controlTileIsAssigned = false;
+        //controlTileIsAssigned = false;
+        movingDownTiles = new List<Tile>();
         tilesAreMoving = false;
         _transform = transform;
         gridBasePosition = (Vector2)_transform.position;
@@ -118,6 +123,7 @@ public class GridManager : MonoBehaviour
         isSwiping = false;
         isSwipingBack = false;
         swipeSessionStarted = false;
+        tilesMovingDown = false;
     }
 
     //populating initial grids on scene
@@ -190,44 +196,44 @@ public class GridManager : MonoBehaviour
         return tile.spriteNumber;
     }
 
-    SpriteRenderer GetSpriteRendererAt(int column, int row)
-    {
-        if (column < 0 || column >= GridWidth
-             || row < 0 || row >= GridHeight)
-            return null;
-        Tile tile = Grid[column, row];
-        SpriteRenderer renderer = tile._spriteRenderer;
-        return renderer;
-    }
+    //SpriteRenderer GetSpriteRendererAt(int column, int row)
+    //{
+    //    if (column < 0 || column >= GridWidth
+    //         || row < 0 || row >= GridHeight)
+    //        return null;
+    //    Tile tile = Grid[column, row];
+    //    SpriteRenderer renderer = tile._spriteRenderer;
+    //    return renderer;
+    //}
 
     bool CheckMatches()
     {
-        HashSet<SpriteRenderer> matchedTiles = new HashSet<SpriteRenderer>(); // 1
+        //HashSet<SpriteRenderer> matchedTiles = new HashSet<SpriteRenderer>(); // 1
         HashSet<Tile> matchedTileTiles = new HashSet<Tile>();
 
         for (int column = 0; column < GridWidth; column++) // 2
         {
             for (int row = 0; row < GridHeight; row++)
             {
-                SpriteRenderer current = GetSpriteRendererAt(column, row); // 3
+                //SpriteRenderer current = GetSpriteRendererAt(column, row); // 3
                 Tile currentTile = Grid[column, row];
+                FindColumnMatchForTile(column, row, currentTile.spriteNumber);
+                //List<SpriteRenderer> horizontalMatches = FindColumnMatchForTile(column, row, /*currentTile._spriteRenderer.sprite /*current.sprite*/currentTile.spriteNumber); // 4
 
-                List<SpriteRenderer> horizontalMatches = FindColumnMatchForTile(column, row, /*currentTile._spriteRenderer.sprite /*current.sprite*/currentTile.spriteNumber); // 4
-
-                if (horizontalMatches.Count >= 2)
+                if (columnMatches.Count>=2 /*horizontalMatches.Count >= 2*/)
                 {
-                    matchedTiles.UnionWith(horizontalMatches);
-                    matchedTiles.Add(current); // 5
+                    //matchedTiles.UnionWith(horizontalMatches);
+                    //matchedTiles.Add(current); // 5
 
                     matchedTileTiles.UnionWith(columnMatches);
                     matchedTileTiles.Add(currentTile);
                 }
-
-                List<SpriteRenderer> verticalMatches = FindRowMatchForTile(column, row, /*currentTile._spriteRenderer.sprite*/ currentTile.spriteNumber); // 6
-                if (verticalMatches.Count >= 2)
+                FindRowMatchForTile(column, row, currentTile.spriteNumber);
+                //List<SpriteRenderer> verticalMatches = FindRowMatchForTile(column, row, /*currentTile._spriteRenderer.sprite*/ currentTile.spriteNumber); // 6
+                if (rowMatches.Count>=2/*verticalMatches.Count >= 2*/)
                 {
-                    matchedTiles.UnionWith(verticalMatches);
-                    matchedTiles.Add(current);
+                    //matchedTiles.UnionWith(verticalMatches);
+                    //matchedTiles.Add(current);
 
                     matchedTileTiles.UnionWith(rowMatches);
                     matchedTileTiles.Add(currentTile);
@@ -243,14 +249,14 @@ public class GridManager : MonoBehaviour
     }
 
 
-    List<SpriteRenderer> FindColumnMatchForTile(int col, int row, int spriteNumber /*Sprite sprite*/)
+    /*List<SpriteRenderer>*/ void FindColumnMatchForTile(int col, int row, int spriteNumber /*Sprite sprite*/)
     {
-        List<SpriteRenderer> result = new List<SpriteRenderer>();
+        //List<SpriteRenderer> result = new List<SpriteRenderer>();
         columnMatches.Clear();
 
         for (int i = col + 1; i < GridWidth; i++)
         {
-            SpriteRenderer nextColumn = GetSpriteRendererAt(i, row);
+            //SpriteRenderer nextColumn = GetSpriteRendererAt(i, row);
 
             Tile tile = Grid[i, row];
             int nexColumnSpriteNumber = tile.spriteNumber;
@@ -258,37 +264,38 @@ public class GridManager : MonoBehaviour
             {
                 break;
             }
-            result.Add(nextColumn);
+            //result.Add(nextColumn);
             columnMatches.Add(tile);
         }
         //Debug.Log(result.Count);
-        return result;
+        //return result;
     }
 
-    List<SpriteRenderer> FindRowMatchForTile(int col, int row, int spriteNumber /*Sprite sprite*/)
+    /*List<SpriteRenderer>*/ void FindRowMatchForTile(int col, int row, int spriteNumber /*Sprite sprite*/)
     {
-        List<SpriteRenderer> result = new List<SpriteRenderer>();
+        //List<SpriteRenderer> result = new List<SpriteRenderer>();
         rowMatches.Clear();
         for (int i = row + 1; i < GridHeight; i++)
         {
-            SpriteRenderer nextRow = GetSpriteRendererAt(col, i);
+            //SpriteRenderer nextRow = GetSpriteRendererAt(col, i);
             Tile tile = Grid[col, i];
             int nexColumnSpriteNumber = tile.spriteNumber;
             if (/*nextColumn.sprite != sprite*/nexColumnSpriteNumber != spriteNumber)
             {
                 break;
             }
-            result.Add(nextRow);
+            //result.Add(nextRow);
             rowMatches.Add(tile);
         }
-        return result;
+        //return result;
     }
 
 
     private void getAllMatchedTiles()
     {
         List<Tile> toDisactivateTiles = new List<Tile>();
-        controlTileIsAssigned = false;
+        //controlTileIsAssigned = false;
+        movingDownTiles.Clear();
         for (int column = 0; column < GridWidth; column++)
         {
             int x = 0;
@@ -432,11 +439,13 @@ public class GridManager : MonoBehaviour
         {
             if (tile.Position != tile.MoveToPosition)
             {
-                tile.moveTo(); 
-                //movingTiles.Add(tile);
+                movingDownTiles.Add(tile);
+                tile.moveTo();
+
             }
         }
-        tilesAreMoving = true;
+        tilesAreMoving = true; //this one monitors movin of whole session of tile moves from player swipe to attack
+        tilesMovingDown = true; //this one monitor movin of tile only untill next match
     }
 
     public void processPlayerCombo(int index, int comboValue)
@@ -735,11 +744,11 @@ public class GridManager : MonoBehaviour
         Grid[column, row] = tile; // 8
         ObjectPulled.SetActive(true);
 
-        if (!controlTileIsAssigned)
-        {
-            controlTileIsAssigned = true;
-            Grid[column, row].isControlTile = true;
-        }
+        //if (!controlTileIsAssigned)
+        //{
+        //    controlTileIsAssigned = true;
+        //    Grid[column, row].isControlTile = true;
+        //}
     }
 
     public void swipeAnimation(Tile selectedTile, Tile moveToTile)
@@ -787,7 +796,7 @@ public class GridManager : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         if (CheckMatches())
         {
-            controlTileIsAssigned = false;
+            //controlTileIsAssigned = false;
             SwapTiles();
         }
         else
@@ -836,7 +845,8 @@ public class GridManager : MonoBehaviour
         int iteration=0;
         if (CommonData.Instance.getGameHardness() == 0)
         {
-            iteration = UnityEngine.Random.Range(0, 5) < 4 ? UnityEngine.Random.Range(1, 3) : UnityEngine.Random.Range(2, 7);
+            iteration = UnityEngine.Random.Range(0, 5) < 4 ? UnityEngine.Random.Range(1, 3) : UnityEngine.Random.Range(2, 5);
+            //iteration = UnityEngine.Random.Range(0, 5) < 4 ? UnityEngine.Random.Range(1, 3) : UnityEngine.Random.Range(2, 7);
         }
         else if (CommonData.Instance.getGameHardness() == 1)
         {
@@ -848,7 +858,8 @@ public class GridManager : MonoBehaviour
         {
             //TO USE LATER WHILE DEVELOPING IAP now this difficulty is not used because it is too hard
             //iteration = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(1, 4) : UnityEngine.Random.Range(4, 7); 
-            iteration = UnityEngine.Random.Range(0, 4) < 3 ? UnityEngine.Random.Range(1, 4) : UnityEngine.Random.Range(3, 7);
+            //iteration = UnityEngine.Random.Range(0, 4) < 3 ? UnityEngine.Random.Range(1, 4) : UnityEngine.Random.Range(3, 7);
+            iteration = UnityEngine.Random.Range(0, 4) < 3 ? UnityEngine.Random.Range(1, 4) : UnityEngine.Random.Range(3, 6);
         }
 
 
@@ -859,19 +870,22 @@ public class GridManager : MonoBehaviour
             int value = 3;
             if (CommonData.Instance.getGameHardness() == 0)
             {
-                value = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(3, 5) : UnityEngine.Random.Range(4, 8);
+                value = UnityEngine.Random.Range(0, 4) < 3 ? UnityEngine.Random.Range(3, 5) : UnityEngine.Random.Range(3, 8);
+                //value = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(3, 5) : UnityEngine.Random.Range(4, 8);
             }
             else if (CommonData.Instance.getGameHardness() == 1)
             {
                 //TO USE LATER WHILE DEVELOPING IAP now this difficulty is 2 
                 //value = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(3, 6) : UnityEngine.Random.Range(4, 9);
-                value = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(3, 5) : UnityEngine.Random.Range(4, 8);
+                //value = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(3, 5) : UnityEngine.Random.Range(4, 8);
+                value = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(3, 5) : UnityEngine.Random.Range(3, 8);
             }
             else if (CommonData.Instance.getGameHardness() == 2)
             {
                 //TO USE LATER WHILE DEVELOPING IAP now this difficulty is not used because it is too hard
                 //value = UnityEngine.Random.Range(0, 2) < 1 ? UnityEngine.Random.Range(3, 7) : UnityEngine.Random.Range(4, 9);
-                value = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(3, 6) : UnityEngine.Random.Range(4, 9);
+                //value = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(3, 6) : UnityEngine.Random.Range(4, 9);
+                value = UnityEngine.Random.Range(0, 3) < 2 ? UnityEngine.Random.Range(3, 5) : UnityEngine.Random.Range(3, 9);
             }
             EnemyFleetManager.instance.distributeResources(index, value, value);
         }
@@ -916,6 +930,14 @@ public class GridManager : MonoBehaviour
             }
         }
 
+        if (tilesMovingDown)
+        {
+            if (movingDownTiles.Count < 1)
+            {
+                tilesMovingDown = false;
+                checkMatchesAfterTilesMoveStopped();
+            }
+        }
 
         //touch process for Android platform
         if (Input.touchCount == 1)

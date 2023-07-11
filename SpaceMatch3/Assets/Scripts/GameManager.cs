@@ -65,11 +65,11 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private GameObject noInternetPanel;
-    private bool adsTimerIsOn;
-    private const float adsTimer = 150;
+    //private bool adsTimerIsOn;
+    private bool adsReadyToShow;
 
-    [SerializeField]
-    private GameObject limitedOfferPanel;
+    private const float adsTimer = 75;
+
 
     private void Awake()
     {
@@ -104,18 +104,22 @@ public class GameManager : MonoBehaviour
         checkTheInternet();
     }
 
+    private void OnApplicationFocus(bool focus)
+    {
+        checkTheInternet();
+    }
 
     public void checkTheInternet() {
         StartCoroutine(checkInternetConnection((isConnected) => {
             if (isConnected)
             {
                 if (noInternetPanel.activeInHierarchy) noInternetPanel.SetActive(false);
-                setAdsTimer(true);
+                //if (!GameParams.getAdsBought())setAdsTimer(true);
             }
             else
             {
                 noInternetPanel.SetActive(true);
-                setAdsTimer(false);
+                //setAdsTimer(false);
             }
         }));
     }
@@ -134,18 +138,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void setAdsTimer(bool on) => adsTimerIsOn= on;
+    //public void setAdsTimer(bool on) => adsTimerIsOn= on;
 
 
-    public void showLimitedOffer()
-    {
-        limitedOfferPanel.SetActive(true);
-    }
-    public void hideLimitedOffer()
-    {
-        AudioManager.Instance.connectionVoice();
-        limitedOfferPanel.SetActive(false);
-    }
 
     //private void setTheTimer() {
     //    turnTimeUp = turnTimeMax;
@@ -369,9 +364,13 @@ public class GameManager : MonoBehaviour
                     AudioManager.Instance.alarmSoundPlay(true);
                     StartCoroutine(shieldsOffMessageTurnOff());
                 }
-                else if (!adsTimerIsOn)
+                else if (adsReadyToShow)
                 {
-                    if (!GameParams.getAdsBought()) InterstitialAd.Instance.ShowAd();
+                    if (!GameParams.getAdsBought())
+                    {
+                        InterstitialAd.Instance.ShowAd();
+                        adsReadyToShow = false;
+                    }
                 }
 
             }
@@ -411,7 +410,7 @@ public class GameManager : MonoBehaviour
     }
 
     private IEnumerator shieldsOffMessageTurnOff() {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(2.5f);
         shieldOffGO.SetActive(false);
         AudioManager.Instance.alarmSoundPlay(false);
     }
@@ -479,10 +478,11 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (adsTimerIsOn && !GameParams.getAdsBought()) {
+        if (!GameParams.getAdsBought()) {
             GameParams.AdsTimer(Time.deltaTime);
             if (GameParams.getAdsTimer() >= adsTimer) {
-                adsTimerIsOn = false;
+                GameParams.ResetAdsTimer();
+                adsReadyToShow = true;
             }
             Debug.Log(GameParams.getAdsTimer());
         }

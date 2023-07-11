@@ -66,9 +66,8 @@ public class InterstitialAd : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsSho
         if (!GameParams.getAdsBought())
         {
             LoadAd();
-            GameParams.ResetAdsTimer();
-            GameManager.instance.setAdsTimer(true);
-            if (Random.Range(0,6)==5)GameManager.instance.showLimitedOffer();
+            if (!GameParams.getAdsBought()) { if (Random.Range(0, 6) == 5) ShopWhileBattle.instance.showLimitedOffer();
+            }
         }
     }
 }
