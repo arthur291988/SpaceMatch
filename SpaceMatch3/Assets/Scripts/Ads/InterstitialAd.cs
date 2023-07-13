@@ -66,7 +66,7 @@ public class InterstitialAd : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsSho
         if (!GameParams.getAdsBought())
         {
             LoadAd();
-            if (!GameParams.getAdsBought()) { if (Random.Range(0, 6) == 5) ShopWhileBattle.instance.showLimitedOffer();
+            if (!GameParams.getAdsBought()) { if (Random.Range(0, 4) == 3) ShopWhileBattle.instance.showLimitedOffer();
             }
         }
     }

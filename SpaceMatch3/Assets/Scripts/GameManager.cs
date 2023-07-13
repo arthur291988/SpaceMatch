@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour
         //turnTimeUp = 7;
         //turnTimeDown = 0;
         //setTheTimer();
-
+        GameParams.ResetAdsTimer();
         checkTheInternet();
     }
 
@@ -484,7 +484,7 @@ public class GameManager : MonoBehaviour
                 GameParams.ResetAdsTimer();
                 adsReadyToShow = true;
             }
-            Debug.Log(GameParams.getAdsTimer());
+            //Debug.Log(GameParams.getAdsTimer());
         }
     }
 }
