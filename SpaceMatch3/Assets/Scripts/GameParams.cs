@@ -82,7 +82,7 @@ public class GameParams
     public static List<string> assistantTextEng = new List<string> {
         "--Greetings Captain of the Solar Federation\r\n--We have received a disturbing message from the borders of the Federation, we were attacked by hostile aliens\r\n--You must fly to the boundary sectors and fight off the first wave of attack\r\n--Good luck Captain",
 
-        "--Excellent captain\r\n--We fought off the first wave of attack\r\n--Now the enemy is concentrating his forces at Neptune, where our frontier colonies\r\n--Turn on zero surge and intercept their forces",
+        "--Excellent Captain\r\n--We fought off the first wave of attack\r\n--Now the enemy is concentrating his forces at Neptune, where our frontier colonies\r\n--Turn on zero surge and intercept their forces",
 
         "--You are the true defender of humanity\r\n--There are reports of plundered hydrogen production platforms on Saturn\r\n--We need to protect our resources\r\n--Start your engines, we go there immediately",
 
@@ -92,9 +92,9 @@ public class GameParams
 
         "--The enemy tried to divide us by attacking Mars\r\n--Zerbo sent the main forces to our main planet, Earth\r\n--The armada is already close to striking distance\r\n--Attack them now",
 
-        "--Oh my God captain... we've found a huge enemy fleet near the sun\r\n--I have never seen so many flagships\r\n--It looks like the enemy's main fleet, we can put an end to this invasion\r\n--Destroy your enemies once and for all",
+        "--Oh my God Captain... we've found a huge enemy fleet near the Sun\r\n--I have never seen so many flagships\r\n--It looks like the enemy's main fleet, we can put an end to this invasion\r\n--Destroy your enemies once and for all",
 
-        "--Congratulations captain, we repelled the alien invasion\r\n--We have proven that the Federation is ready to develop beyond the boundaries of the Solar System\r\n--Very soon new tasks will be set before you\r\n--We invite you to step into the headquarters of the command"
+        "--Congratulations Captain, we repelled the alien invasion\r\n--We have proven that the Federation is ready to develop beyond the boundaries of the Solar System\r\n--Very soon new tasks will be set before you\r\n--We invite you to step into the headquarters of the command"
     };
 
     //index is level

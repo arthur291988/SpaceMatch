@@ -207,6 +207,7 @@ public class MenuManager : MonoBehaviour
                 setLevelparameters();
             }
         }
+        AudioManager.Instance.connectionVoice();
     }
 
     
