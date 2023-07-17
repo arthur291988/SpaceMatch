@@ -138,7 +138,7 @@ public class GameParams
         "Lord Filsh",
         "Lord Zerf",
         "Admiral Zerbo",
-        "Emperor Seres"
+        "Emperor Ceres"
     }; 
     
     public static List<string> CharactersNameTextRus = new List<string> {
